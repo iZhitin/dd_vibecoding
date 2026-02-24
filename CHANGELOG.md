@@ -23,3 +23,8 @@
 - **[INIT-003]** Настроена централизованная конфигурация через `pydantic-settings`.
 - Добавлен `backend/app/core/config.py` с `Settings(BaseSettings)`, загрузкой `.env` и кэшируемым `get_settings()`.
 - `backend/app/main.py` использует `get_settings()` для конфигурации CORS origins через `APP_URL`.
+- **[INIT-004]** Настроен frontend на React 18 + Vite + Tailwind CSS + Zustand + Framer Motion.
+- Добавлена маршрутизация-заглушка через React Router для путей `/`, `/login`, `/capture`, `/practice`, `/history`, `/review` с редиректом `/ -> /capture`.
+- Настроен Tailwind через `@tailwindcss/vite` и `@import "tailwindcss"` в `src/index.css`, добавлены базовые монохромные стили (белый фон, тёмный текст, sans-serif).
+- Обновлён `frontend/vite.config.ts`: подключён Tailwind-плагин и proxy `/api` на `http://localhost:8000`.
+- Для стабильной верификации тестового контура добавлен backend smoke-тест `backend/tests/test_health.py` (проверка `GET /health`).

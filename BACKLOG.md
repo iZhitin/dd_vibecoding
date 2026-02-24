@@ -244,7 +244,7 @@ dd/
 
 ---
 
-- [ ] [INIT]-[004] Настроить frontend: React + Vite + Tailwind + Zustand
+- [x] [INIT]-[004] Настроить frontend: React + Vite + Tailwind + Zustand
 
   **Контекст:** Корневая структура проекта создана ([INIT]-[001]). Frontend — PWA на React 18 с Vite, Tailwind CSS (строгая монохромная типографика), Zustand (стейт), Framer Motion (анимации).
 
