@@ -1,10 +1,10 @@
-import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import auth, cards, practice, users
+from app.core.config import get_settings
 
 
 @asynccontextmanager
@@ -19,10 +19,14 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
 
-    cors_origins = os.getenv("APP_URL", "http://localhost:5173")
+    settings = get_settings()
+    cors_origins = settings.APP_URL
+    allow_origins = [origin.strip() for origin in cors_origins.split(",") if origin.strip()]
+    if not allow_origins:
+        allow_origins = ["http://localhost:5173"]
     application.add_middleware(
         CORSMiddleware,
-        allow_origins=[origins.strip() for origins in cors_origins.split(",")],
+        allow_origins=allow_origins,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],

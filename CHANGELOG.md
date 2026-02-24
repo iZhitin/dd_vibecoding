@@ -20,3 +20,6 @@
 - `backend/app/main.py` — FastAPI app factory с CORS middleware, health-check (`GET /health`), подключёнными роутерами-заглушками (`/api/auth`, `/api/cards`, `/api/practice`, `/api/me`).
 - `__init__.py` во всех Python-пакетах (`app`, `api`, `api/routes`, `models`, `schemas`, `services`, `workers`, `core`).
 - Роутеры-заглушки: `auth.py`, `cards.py`, `practice.py`, `users.py`.
+- **[INIT-003]** Настроена централизованная конфигурация через `pydantic-settings`.
+- Добавлен `backend/app/core/config.py` с `Settings(BaseSettings)`, загрузкой `.env` и кэшируемым `get_settings()`.
+- `backend/app/main.py` использует `get_settings()` для конфигурации CORS origins через `APP_URL`.
