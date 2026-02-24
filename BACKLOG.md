@@ -176,7 +176,7 @@ dd/
 
 ---
 
-- [ ] [INIT]-[002] Настроить backend: FastAPI + pyproject.toml + точка входа
+- [x] [INIT]-[002] Настроить backend: FastAPI + pyproject.toml + точка входа
 
   **Контекст:** Структура проекта создана в [INIT]-[001]. Backend использует Python 3.12, FastAPI, SQLAlchemy 2.0 (async), Pydantic v2.
 
