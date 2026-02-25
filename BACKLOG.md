@@ -352,7 +352,7 @@ dd/
 
 ---
 
-- [ ] [INIT]-[007] Настроить GitHub Actions CI pipeline
+- [x] [INIT]-[007] Настроить GitHub Actions CI pipeline
 
   **Контекст:** Backend и frontend настроены, линтеры на месте. CI/CD: GitHub Actions (TECHSPEC §9). Пайплайн: push to main → lint → test → build docker image.
 

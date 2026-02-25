@@ -9,6 +9,9 @@
 ## [0.1.1] — 2026-02-25
 
 ### Добавлено
+- **[INIT-007]** Настроен GitHub Actions CI pipeline.
+  - Добавлен файл `.github/workflows/ci.yml` с workflow для проверки `main` ветки при `push` и `pull_request`.
+  - Включены jobs `backend` (тестирование, линтеры, db+redis) и `frontend` (линтеры, build).
 - **[INIT-006]** Настроены линтеры и форматтеры для backend и frontend.
   - Backend: добавлена конфигурация `ruff` в `pyproject.toml` (target Python 3.12, line-length 100, правила E/F/I/N/UP/B/SIM).
   - Backend: добавлена секция `[tool.pytest.ini_options]` с `asyncio_mode = "auto"`.
