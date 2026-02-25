@@ -12,6 +12,7 @@ from app.models.practice_session import PracticeSession, SessionStatus
 from app.models.user import User
 from app.schemas.practice import PracticeCardRead, PracticeSubmitRequest
 from app.services.srs import select_practice_cards, update_weight_after_reveal
+from app.services.streak import update_streak
 
 logger = logging.getLogger(__name__)
 
@@ -43,18 +44,24 @@ async def generate_daily_session(
         await db.refresh(session)
 
     cards = await select_practice_cards(user_id, db, count=10)
+    card_ids = [card.id for card in cards]
+
+    last_logs_dict: dict[uuid.UUID, PracticeLog] = {}
+    if card_ids:
+        # PostgreSQL specific distinct ON
+        logs_stmt = (
+            select(PracticeLog)
+            .where(PracticeLog.card_id.in_(card_ids))
+            .distinct(PracticeLog.card_id)
+            .order_by(PracticeLog.card_id, desc(PracticeLog.created_at))
+        )
+        logs_res = await db.execute(logs_stmt)
+        for log in logs_res.scalars().all():
+            last_logs_dict[log.card_id] = log
 
     practice_cards: list[PracticeCardRead] = []
     for card in cards:
-        log_stmt = (
-            select(PracticeLog)
-            .where(PracticeLog.card_id == card.id)
-            .order_by(desc(PracticeLog.created_at))
-            .limit(1)
-        )
-        log_res = await db.execute(log_stmt)
-        last_log = log_res.scalars().first()
-
+        last_log = last_logs_dict.get(card.id)
         practice_cards.append(
             PracticeCardRead(
                 card_id=card.id,
@@ -83,23 +90,34 @@ async def submit_practice(
     if session.status != SessionStatus.ACTIVE:
         raise HTTPException(status_code=400, detail="Session is not active")
 
+    card_ids = [sentence.card_id for sentence in data.sentences]
+    
+    # Bulk load cards
+    cards_stmt = select(Card).where(Card.id.in_(card_ids))
+    cards_res = await db.execute(cards_stmt)
+    cards_dict = {c.id: c for c in cards_res.scalars().all()}
+    
+    # Bulk load last logs
+    last_logs_dict: dict[uuid.UUID, PracticeLog] = {}
+    if card_ids:
+        logs_stmt = (
+            select(PracticeLog)
+            .where(PracticeLog.card_id.in_(card_ids))
+            .distinct(PracticeLog.card_id)
+            .order_by(PracticeLog.card_id, desc(PracticeLog.created_at))
+        )
+        logs_res = await db.execute(logs_stmt)
+        for log in logs_res.scalars().all():
+            last_logs_dict[log.card_id] = log
+
     for sentence in data.sentences:
-        card_stmt = select(Card).where(Card.id == sentence.card_id)
-        card_res = await db.execute(card_stmt)
-        card = card_res.scalars().first()
+        card = cards_dict.get(sentence.card_id)
         if not card or card.user_id != user_id:
             raise HTTPException(
                 status_code=403, detail=f"Not authorized to submit for card {sentence.card_id}"
             )
 
-        log_stmt = (
-            select(PracticeLog)
-            .where(PracticeLog.card_id == card.id)
-            .order_by(desc(PracticeLog.created_at))
-            .limit(1)
-        )
-        log_res = await db.execute(log_stmt)
-        last_log = log_res.scalars().first()
+        last_log = last_logs_dict.get(card.id)
         if last_log and last_log.user_sentence == sentence.user_sentence:
             logger.info("Soft-check: User copy-pasted previous sentence for card %s", card.id)
 
@@ -123,7 +141,7 @@ async def submit_practice(
     user_res = await db.execute(user_stmt)
     user = user_res.scalars().first()
     if user:
-        user.last_practice_at = datetime.now(UTC)
+        await update_streak(user, db)
 
     await db.commit()
     await db.refresh(session)

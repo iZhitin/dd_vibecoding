@@ -5,8 +5,15 @@ from collections.abc import Sequence
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.card import Card
 from app.models.practice_log import Grade
+from app.models.card import Card
+
+WEIGHT_REVEALED = 2.0
+WEIGHT_RED = 1.5
+WEIGHT_YELLOW = 1.2
+WEIGHT_GREEN = 0.7
+WEIGHT_GREEN_STAR = 0.5
+MIN_WEIGHT = 0.01
 
 
 async def select_practice_cards(
@@ -42,20 +49,20 @@ async def select_practice_cards(
 def update_weight_after_review(card: Card, grade: Grade, revealed: bool) -> None:
     """Update learning weight based on the review outcome."""
     if revealed:
-        card.weight *= 2.0
+        card.weight *= WEIGHT_REVEALED
 
     if grade == Grade.RED:
-        card.weight *= 1.5
+        card.weight *= WEIGHT_RED
     elif grade == Grade.YELLOW:
-        card.weight *= 1.2
+        card.weight *= WEIGHT_YELLOW
     elif grade == Grade.GREEN:
-        card.weight *= 0.7
+        card.weight *= WEIGHT_GREEN
     elif grade == Grade.GREEN_STAR:
-        card.weight *= 0.5
+        card.weight *= WEIGHT_GREEN_STAR
 
-    card.weight = max(card.weight, 0.01)
+    card.weight = max(card.weight, MIN_WEIGHT)
 
 
 def update_weight_after_reveal(card: Card) -> None:
     """Increase weight when translation is revealed without giving an answer."""
-    card.weight *= 2.0
+    card.weight *= WEIGHT_REVEALED
