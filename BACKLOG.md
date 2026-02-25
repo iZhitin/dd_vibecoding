@@ -1313,7 +1313,7 @@ dd/
 
 ---
 
-- [ ] [UI]-[007] Настроить Service Worker и PWA manifest
+- [x] [UI]-[007] Настроить Service Worker и PWA manifest
 
   **Контекст:** DD — PWA (PRD §1, TECHSPEC §3). Пользователь должен иметь возможность «установить» приложение на домашний экран. Service Worker кэширует статику.
 

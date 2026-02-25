@@ -6,6 +6,17 @@
 
 ---
 
+## [0.1.2] — 2026-02-26
+
+### Добавлено
+- **[UI-007]** Настроен Service Worker и PWA manifest.
+  - Сгенерированы минималистичные монохромные иконки приложения (512, 192, 180, 32, 16 px).
+  - Расширена конфигурация `vite-plugin-pwa`: `start_url`, `scope`, maskable icon, Workbox с `navigateFallbackDenylist` для исключения `/api` из кэша SW.
+  - Обновлён `index.html`: добавлены PWA meta-теги (`theme-color`, `description`), `apple-touch-icon`, favicon PNG.
+  - Статические ассеты кэшируются для offline-доступа, API-запросы не кэшируются.
+
+---
+
 ## [0.1.1] — 2026-02-25
 
 ### Добавлено
