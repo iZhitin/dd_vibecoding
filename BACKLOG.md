@@ -420,7 +420,7 @@ dd/
 
 ---
 
-- [ ] [INIT]-[099] Уборка этапа INIT
+- [x] [INIT]-[099] Уборка этапа INIT
 
   **Контекст:** Завершены задачи [INIT]-[001]–[INIT]-[007]. Проект инициализирован: backend (FastAPI), frontend (React+Vite), Docker, CI.
 
@@ -432,9 +432,9 @@ dd/
   - Запустить `ruff check` на backend и `npm run lint` на frontend, исправить все предупреждения.
 
   **Критерии готовности (DoD):**
-  - [ ] Нет шаблонных файлов Vite (react.svg, дефолтные стили)
-  - [ ] Нет захардкоженных секретов в коде (grep на «sk-», «password», «secret» не находит ничего кроме `.env.example`)
-  - [ ] `ruff check` и `npm run lint` проходят без предупреждений
+  - [x] Нет шаблонных файлов Vite (react.svg, дефолтные стили)
+  - [x] Нет захардкоженных секретов в коде (grep на «sk-», «password», «secret» не находит ничего кроме `.env.example`)
+  - [x] `ruff check` и `npm run lint` проходят без предупреждений
 
 ---
 
