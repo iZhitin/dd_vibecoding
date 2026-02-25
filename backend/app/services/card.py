@@ -1,5 +1,5 @@
 from collections.abc import Sequence
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from uuid import UUID
 
 from sqlalchemy import func, select
@@ -16,7 +16,7 @@ async def create_card(user_id: UUID, data: CardCreate, db: AsyncSession) -> Card
         translation=data.translation,
         context_sentence=data.context_sentence,
         weight=1.0,
-        next_review_at=datetime.now(timezone.utc),
+        next_review_at=datetime.now(UTC),
     )
     db.add(card)
     await db.commit()

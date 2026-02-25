@@ -701,7 +701,7 @@ dd/
 
 ---
 
-- [ ] [CORE]-[002] Интегрировать Dictionary API для автоперевода
+- [x] [CORE]-[002] Интегрировать Dictionary API для автоперевода
 
   **Контекст:** Capture endpoint работает ([CORE]-[001]). PRD §4.1: интеграция с Dictionary API (Google Translate / DeepL / OpenAI). TECHSPEC §6 Scenario A: Optimistic UI — UI показывает skeleton, пока грузится перевод. Fallback: если API недоступен, пользователь вводит перевод вручную (TECHSPEC §7).
 
@@ -719,9 +719,9 @@ dd/
   - Этот эндпоинт protected (`Depends(get_current_user)`).
 
   **Критерии готовности (DoD):**
-  - [ ] `POST /api/translate` с `{"word": "hello"}` возвращает перевод (при наличии API ключа)
-  - [ ] При недоступности API возвращает `{"translation": null}` (не 500)
-  - [ ] Timeout не превышает 5 секунд
+  - [x] `POST /api/translate` с `{"word": "hello"}` возвращает перевод (при наличии API ключа)
+  - [x] При недоступности API возвращает `{"translation": null}` (не 500)
+  - [x] Timeout не превышает 5 секунд
 
 ---
 

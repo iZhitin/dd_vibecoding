@@ -1,3 +1,4 @@
+from datetime import UTC
 from uuid import UUID
 
 import pytest
@@ -43,11 +44,11 @@ def mock_db():
             return MockItems()
 
     async def mock_refresh(instance):
-        from datetime import datetime, timezone
+        from datetime import datetime
         if not getattr(instance, "id", None):
             instance.id = UUID("00000000-0000-0000-0000-000000000004")
         if not getattr(instance, "created_at", None):
-            instance.created_at = datetime.now(timezone.utc)
+            instance.created_at = datetime.now(UTC)
 
     db = AsyncMock()
     db.add = MagicMock()

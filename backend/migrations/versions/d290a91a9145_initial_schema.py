@@ -5,17 +5,17 @@ Revises:
 Create Date: 2026-02-25 13:11:14.709561
 
 """
-from typing import Sequence, Union
+from collections.abc import Sequence
 
-from alembic import op
 import sqlalchemy as sa
+from alembic import op
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision: str = 'd290a91a9145'
-down_revision: Union[str, Sequence[str], None] = None
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | Sequence[str] | None = None
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
@@ -64,7 +64,9 @@ def upgrade() -> None:
     sa.Column('session_id', sa.Uuid(), nullable=False),
     sa.Column('card_id', sa.Uuid(), nullable=False),
     sa.Column('user_sentence', sa.Text(), nullable=False),
-    sa.Column('grade', sa.Enum('GREEN', 'GREEN_STAR', 'YELLOW', 'RED', name='grade'), nullable=True),
+    sa.Column(
+        'grade', sa.Enum('GREEN', 'GREEN_STAR', 'YELLOW', 'RED', name='grade'), nullable=True
+    ),
     sa.Column('llm_feedback', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
     sa.Column('revealed_translation', sa.Boolean(), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),

@@ -1,24 +1,22 @@
 import asyncio
+import os
+import sys
 from logging.config import fileConfig
 
+from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
-
-from alembic import context
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
-import os
-import sys
-
 # Add app to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from app.core.config import get_settings
-from app.models import Base
+from app.core.config import get_settings  # noqa: E402
+from app.models import Base  # noqa: E402
 
 config.set_main_option("sqlalchemy.url", get_settings().DATABASE_URL)
 

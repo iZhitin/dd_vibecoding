@@ -1,15 +1,14 @@
 import asyncio
 import random
-from datetime import datetime, timedelta, time, timezone
+from datetime import UTC, datetime, time, timedelta
 
 from sqlalchemy import select
 
 from app.core.database import async_session_maker
-from app.models.user import User
 from app.models.card import Card
+from app.models.practice_log import Grade, PracticeLog
 from app.models.practice_session import PracticeSession, SessionStatus
-from app.models.practice_log import PracticeLog, Grade
-
+from app.models.user import User
 
 WORDS = [
     ("serendipity", "счастливая случайность", "We found this great restaurant by pure serendipity."),
@@ -57,7 +56,7 @@ async def seed() -> None:
         await session.flush()
         
         print("Creating 15 Cards...")
-        now = datetime.now(timezone.utc).replace(tzinfo=None)
+        now = datetime.now(UTC).replace(tzinfo=None)
         cards = []
         for i, (word, translation, context) in enumerate(WORDS):
             # weights from 0.1 to 2.0
