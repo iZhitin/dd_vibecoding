@@ -77,3 +77,6 @@
 - Создан `docker-compose.dev.yml` для запуска PostgreSQL и Redis локально.
 - Создан `docker-compose.yml` как шаблон полного стека (backend, frontend, nginx, worker, db, redis).
 - Создан `nginx/nginx.conf` с конфигурацией reverse proxy `/api` -> backend, `/` -> frontend.
+## 2026-02-25
+- Выполнена задача [AUTH]-[001]: реализована генерация и отправка Magic Link, настроена генерация JWT и роутинги авторизации.
+

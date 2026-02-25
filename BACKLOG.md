@@ -581,7 +581,7 @@ dd/
 
 ---
 
-- [ ] [AUTH]-[001] Реализовать генерацию и отправку Magic Link
+- [x] [AUTH]-[001] Реализовать генерацию и отправку Magic Link
 
   **Контекст:** Модели и схемы существуют ([DATA]-[002], [DATA]-[004]). Auth: passwordless через Magic Link (PRD §5.2, TECHSPEC §5.1). Пользователь вводит email → получает письмо со ссылкой → кликает → попадает в приложение.
 
@@ -608,10 +608,10 @@ dd/
     - `POST /api/auth/verify` — принимает `VerifyRequest`, вызывает `verify_magic_link`, возвращает `TokenResponse`.
 
   **Критерии готовности (DoD):**
-  - [ ] `POST /api/auth/login` с `{"email": "test@example.com"}` возвращает 200 и логирует magic link в консоль
-  - [ ] `POST /api/auth/verify` с валидным токеном возвращает `{"access_token": "...", "token_type": "bearer"}`
-  - [ ] Просроченный magic token (>15 мин) возвращает 401
-  - [ ] Повторный `POST /api/auth/login` для нового email создаёт пользователя в БД
+  - [x] `POST /api/auth/login` с `{"email": "test@example.com"}` возвращает 200 и логирует magic link в консоль
+  - [x] `POST /api/auth/verify` с валидным токеном возвращает `{"access_token": "...", "token_type": "bearer"}`
+  - [x] Просроченный magic token (>15 мин) возвращает 401
+  - [x] Повторный `POST /api/auth/login` для нового email создаёт пользователя в БД
 
 ---
 
