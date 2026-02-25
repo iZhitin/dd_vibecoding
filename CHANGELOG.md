@@ -6,6 +6,18 @@
 
 ---
 
+## [0.1.1] — 2026-02-25
+
+### Добавлено
+- **[INIT-006]** Настроены линтеры и форматтеры для backend и frontend.
+  - Backend: добавлена конфигурация `ruff` в `pyproject.toml` (target Python 3.12, line-length 100, правила E/F/I/N/UP/B/SIM).
+  - Backend: добавлена секция `[tool.pytest.ini_options]` с `asyncio_mode = "auto"`.
+  - Frontend: создан `.prettierrc` (semicolons, double quotes, trailing commas, tab width 2).
+  - Frontend: добавлены npm-скрипты `format` и `format:check` для prettier.
+  - Исправлено форматирование 7 файлов в `src/` по стандартам prettier.
+
+---
+
 ## [0.1.0] — 2026-02-24
 
 ### Добавлено
