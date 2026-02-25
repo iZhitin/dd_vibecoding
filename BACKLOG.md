@@ -510,7 +510,7 @@ dd/
 
 ---
 
-- [ ] [DATA]-[004] Создать Pydantic-схемы (request/response) для всех сущностей
+- [x] [DATA]-[004] Создать Pydantic-схемы (request/response) для всех сущностей
 
   **Контекст:** SQLAlchemy-модели существуют ([DATA]-[002]). API-эндпоинты описаны в TECHSPEC §5.1. Pydantic v2 используется для валидации.
 
@@ -534,9 +534,9 @@ dd/
     - `TimezoneUpdate(timezone: str)` — валидация: timezone должен быть валидным IANA timezone.
 
   **Критерии готовности (DoD):**
-  - [ ] Все схемы импортируются без ошибок
-  - [ ] `PracticeSubmitRequest` отклоняет payload с количеством sentences != 10
-  - [ ] `CardRead` корректно сериализует SQLAlchemy-модель (from_attributes=True)
+  - [x] Все схемы импортируются без ошибок
+  - [x] `PracticeSubmitRequest` отклоняет payload с количеством sentences != 10
+  - [x] `CardRead` корректно сериализует SQLAlchemy-модель (from_attributes=True)
 
 ---
 

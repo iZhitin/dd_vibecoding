@@ -9,6 +9,10 @@
 ## [0.1.1] — 2026-02-25
 
 ### Добавлено
+- **[DATA-004]** Созданы Pydantic-схемы (request/response) для всех сущностей (User, Card, Practice, Auth).
+  - Схемы Auth (`LoginRequest`, `VerifyRequest`, `TokenResponse`), модели (`CardCreate`, `PracticeSubmitRequest` с валидацией длины, `TimezoneUpdate` с IANA zone_info).
+  - Настроены параметры `from_attributes=True` для использования SQLAlchemy объектов.
+  - Добавлена зависимость `pydantic[email]` в `pyproject.toml`.
 - **[DATA-003]** Инициализирован Alembic и создана первая миграция.
   - Установлен асинхронный шаблон Alembic (`alembic init -t async`).
   - Файл `env.py` настроен на использование `Base.metadata` и конфигурации из pydantic-settings.
