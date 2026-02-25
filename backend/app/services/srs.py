@@ -5,8 +5,8 @@ from collections.abc import Sequence
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.practice_log import Grade
 from app.models.card import Card
+from app.models.practice_log import Grade
 
 WEIGHT_REVEALED = 2.0
 WEIGHT_RED = 1.5

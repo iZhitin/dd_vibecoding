@@ -2,10 +2,13 @@ import logging
 import uuid
 from datetime import UTC, datetime
 
+from arq import create_pool
+from arq.connections import ArqRedis, RedisSettings
 from fastapi import HTTPException
 from sqlalchemy import desc, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.config import get_settings
 from app.models.card import Card
 from app.models.practice_log import PracticeLog
 from app.models.practice_session import PracticeSession, SessionStatus
@@ -15,6 +18,15 @@ from app.services.srs import select_practice_cards, update_weight_after_reveal
 from app.services.streak import update_streak
 
 logger = logging.getLogger(__name__)
+
+_pool: ArqRedis | None = None
+
+async def get_arq_pool() -> ArqRedis:
+    global _pool
+    if _pool is None:
+        settings = get_settings()
+        _pool = await create_pool(RedisSettings.from_dsn(settings.REDIS_URL))
+    return _pool
 
 
 async def generate_daily_session(
@@ -146,6 +158,7 @@ async def submit_practice(
     await db.commit()
     await db.refresh(session)
 
-    # TODO: enqueue llm_review task
+    pool = await get_arq_pool()
+    await pool.enqueue_job("review_sentences", session.id)
 
     return session

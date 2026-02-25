@@ -888,7 +888,7 @@ dd/
 
 ---
 
-- [ ] [AI]-[001] Настроить Arq worker и подключение к Redis
+- [x] [AI]-[001] Настроить Arq worker и подключение к Redis
 
   **Контекст:** Redis запускается через docker-compose.dev.yml ([INIT]-[005]). `REDIS_URL` доступен через settings ([INIT]-[003]). Arq — легковесный task queue на Python (TECHSPEC §3).
 
@@ -917,7 +917,7 @@ dd/
 
 ---
 
-- [ ] [AI]-[002] Создать Pydantic-схему для LLM-ответа (Traffic Light)
+- [x] [AI]-[002] Создать Pydantic-схему для LLM-ответа (Traffic Light)
 
   **Контекст:** PRD §3.C описывает Traffic Light Report: GREEN (без ошибок), GREEN_STAR (выдающееся использование), YELLOW (мелкие недочёты), RED (грамматическая ошибка). TECHSPEC §5.2: строгий JSON-формат для ответа LLM (pydantic model).
 
@@ -942,7 +942,7 @@ dd/
 
 ---
 
-- [ ] [AI]-[003] Реализовать LLM Review Worker
+- [x] [AI]-[003] Реализовать LLM Review Worker
 
   **Контекст:** Arq worker настроен ([AI]-[001]), схема ответа определена ([AI]-[002]). TECHSPEC §6 Scenario B: после submit воркер отправляет предложения на проверку LLM. PRD §5.2: gpt-4o-mini для валидации. TECHSPEC §7: Retry x3 с exp. backoff, при недоступности — сохранить raw logs.
 
@@ -989,7 +989,7 @@ dd/
 
 ---
 
-- [ ] [AI]-[004] Подключить enqueue LLM-review в submit_practice
+- [x] [AI]-[004] Подключить enqueue LLM-review в submit_practice
 
   **Контекст:** LLM worker работает ([AI]-[003]). В `submit_practice` ([CORE]-[005]) есть TODO-заглушка для постановки задачи в очередь.
 
@@ -1010,7 +1010,7 @@ dd/
 
 ---
 
-- [ ] [AI]-[099] Уборка этапа AI
+- [x] [AI]-[099] Уборка этапа AI
 
   **Контекст:** Завершены задачи [AI]-[001]–[AI]-[004]. LLM-review работает асинхронно.
 
