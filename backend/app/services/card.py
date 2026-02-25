@@ -44,3 +44,9 @@ async def get_user_cards(
     items = result.scalars().all()
 
     return items, total
+
+
+async def get_card(user_id: UUID, card_id: UUID, db: AsyncSession) -> Card | None:
+    stmt = select(Card).where(Card.id == card_id, Card.user_id == user_id)
+    result = await db.execute(stmt)
+    return result.scalar_one_or_none()

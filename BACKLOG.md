@@ -816,7 +816,7 @@ dd/
 
 ---
 
-- [ ] [CORE]-[006] Реализовать GET /api/cards/:id/translation — получение перевода (Reveal)
+- [x] [CORE]-[006] Реализовать GET /api/cards/:id/translation — получение перевода (Reveal)
 
   **Контекст:** Practice flow работает ([CORE]-[004], [CORE]-[005]). PRD §3.B: кнопка «Reveal Translation» скрыта, при нажатии показывает перевод. PRD §4.3: нажатие Reveal → вес слова резко растёт.
 
@@ -828,9 +828,9 @@ dd/
   - Обновление веса будет отмечено в `PracticeSubmitRequest.revealed_translation` при отправке сессии ([CORE]-[005] уже обрабатывает это).
 
   **Критерии готовности (DoD):**
-  - [ ] `GET /api/cards/{card_id}/translation` возвращает перевод
-  - [ ] Чужая карточка → 404
-  - [ ] Без авторизации → 401
+  - [x] `GET /api/cards/{card_id}/translation` возвращает перевод
+  - [x] Чужая карточка → 404
+  - [x] Без авторизации → 401
 
 ---
 

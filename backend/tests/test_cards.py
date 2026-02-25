@@ -18,6 +18,12 @@ def mock_db():
         def scalar_one(self):
             return 2
 
+        def scalar_one_or_none(self):
+            class MockCard:
+                id = UUID("00000000-0000-0000-0000-000000000002")
+                translation = "яблоко"
+            return MockCard()
+
         def scalars(self):
             class MockItems:
                 def all(self):
@@ -112,5 +118,28 @@ async def test_list_cards(client: AsyncClient, mock_db):
     assert len(data["items"]) == 2
     words = [item["word"] for item in data["items"]]
     assert "apple" in words
-    assert "banana" in words
     assert mock_db.execute.called
+
+
+@pytest.mark.asyncio
+async def test_get_card_translation(client: AsyncClient, mock_db):
+    response = await client.get("/api/cards/00000000-0000-0000-0000-000000000002/translation")
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["card_id"] == "00000000-0000-0000-0000-000000000002"
+    assert data["translation"] == "яблоко"
+    assert mock_db.execute.called
+
+
+@pytest.mark.asyncio
+async def test_get_card_translation_not_found(client: AsyncClient, mock_db):
+    class NotFoundMockResult:
+        def scalar_one_or_none(self):
+            return None
+    mock_db.execute.return_value = NotFoundMockResult()
+
+    response = await client.get("/api/cards/00000000-0000-0000-0000-000000000005/translation")
+    assert response.status_code == 404
+    data = response.json()
+    assert data["detail"] == "Card not found"

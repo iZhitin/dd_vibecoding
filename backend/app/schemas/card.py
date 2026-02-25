@@ -26,3 +26,8 @@ class CardRead(CardBase):
 class CardList(BaseModel):
     items: list[CardRead]
     total: int
+
+
+class CardTranslationRead(BaseModel):
+    card_id: UUID
+    translation: str
