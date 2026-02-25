@@ -46,10 +46,8 @@ async def send_email(to: str, subject: str, html: str) -> bool:
 
 
 async def send_magic_link_email(to: str, url: str) -> bool:
-    from app.core.config import get_settings
     from app.templates.emails import MAGIC_LINK_HTML
 
-    settings = get_settings()
     html = MAGIC_LINK_HTML.format(url=url)
     return await send_email(
         to=to,
@@ -71,7 +69,9 @@ async def send_reminder_email(to: str, card_count: int) -> bool:
     )
 
 
-async def send_digest_email(to: str, session_id: str, reviews: list[dict], streak: int, app_url: str) -> bool:
+async def send_digest_email(
+    to: str, session_id: str, reviews: list[dict], streak: int, app_url: str
+) -> bool:
     from app.templates.emails import DAILY_DIGEST_HTML_WRAPPER, REVIEW_ITEM_HTML
 
     reviews_html = ""

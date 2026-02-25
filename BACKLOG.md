@@ -1103,7 +1103,7 @@ dd/
 
 ---
 
-- [ ] [NOTIFY]-[004] Реализовать Daily Digest (утренний отчёт)
+- [x] [NOTIFY]-[004] Реализовать Daily Digest (утренний отчёт)
 
   **Контекст:** LLM-review заполняет `PracticeLog.grade` и `PracticeLog.llm_feedback` ([AI]-[003]). PRD §3.C: Review приходит следующим утром по email (Async Feedback). Traffic Light Report.
 
@@ -1119,10 +1119,10 @@ dd/
   - Логика выбора времени отправки: для MVP — отправлять в 8:00 по таймзоне пользователя (cron каждый час, проверять `user.timezone`).
 
   **Критерии готовности (DoD):**
-  - [ ] Cron-задача `send_daily_digests` запускается
-  - [ ] Пользователь получает digest с Traffic Light Report за вчерашнюю сессию
-  - [ ] Digest содержит: цветные грейды, слова, feedback, streak, ссылку на приложение
-  - [ ] Если LLM-review не завершён — digest не отправляется (ждёт)
+  - [x] Cron-задача `send_daily_digests` запускается
+  - [x] Пользователь получает digest с Traffic Light Report за вчерашнюю сессию
+  - [x] Digest содержит: цветные грейды, слова, feedback, streak, ссылку на приложение
+  - [x] Если LLM-review не завершён — digest не отправляется (ждёт)
 
 ---
 
