@@ -9,6 +9,9 @@
 ## [0.1.1] — 2026-02-25
 
 ### Добавлено
+- **[DATA-001]** Настроен SQLAlchemy async engine и фабрика сессий.
+  - Создан `backend/app/core/database.py` (c `create_async_engine`, `async_sessionmaker` и `get_db()`).
+  - Создан `backend/app/models/base.py` с базовым классом `Base` и `TimestampMixin`.
 - **[INIT-099]** Уборка этапа INIT.
   - Удалены файлы `.gitkeep` из непустых директорий.
   - Из `frontend/` удалены неиспользуемые шаблонные файлы Vite (`App.css`, `react.svg`, `vite.svg`), проверена консистентность конфигурации CORS.

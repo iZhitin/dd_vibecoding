@@ -442,7 +442,7 @@ dd/
 
 ---
 
-- [ ] [DATA]-[001] Настроить SQLAlchemy async engine и фабрику сессий
+- [x] [DATA]-[001] Настроить SQLAlchemy async engine и фабрику сессий
 
   **Контекст:** Backend настроен ([INIT]-[002]), конфигурация через pydantic-settings ([INIT]-[003]). `DATABASE_URL` доступен через `get_settings().DATABASE_URL`. PostgreSQL запускается через docker-compose.dev.yml.
 
@@ -457,9 +457,9 @@ dd/
     - Все первичные ключи — UUID (используя `uuid7` или `uuid4` с `mapped_column(default=uuid.uuid4)`).
 
   **Критерии готовности (DoD):**
-  - [ ] `from app.core.database import get_db` импортируется без ошибок
-  - [ ] `from app.models.base import Base, TimestampMixin` импортируется без ошибок
-  - [ ] `get_db()` — async generator, совместимый с `Depends()` в FastAPI
+  - [x] `from app.core.database import get_db` импортируется без ошибок
+  - [x] `from app.models.base import Base, TimestampMixin` импортируется без ошибок
+  - [x] `get_db()` — async generator, совместимый с `Depends()` в FastAPI
 
 ---
 
