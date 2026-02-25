@@ -1,5 +1,7 @@
-import { BrowserRouter, Link, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
+import { AuthGuard, GuestGuard } from "./components/AuthGuard";
+import { Layout } from "./components/Layout";
 import { CapturePage } from "./pages/CapturePage";
 import { HistoryPage } from "./pages/HistoryPage";
 import { LoginPage } from "./pages/LoginPage";
@@ -9,38 +11,23 @@ import { ReviewPage } from "./pages/ReviewPage";
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-white text-gray-900">
-        <header className="border-b border-gray-200">
-          <nav className="mx-auto flex max-w-5xl flex-wrap gap-4 px-6 py-4 text-sm">
-            <Link className="hover:text-black/80" to="/capture">
-              Capture
-            </Link>
-            <Link className="hover:text-black/80" to="/practice">
-              Practice
-            </Link>
-            <Link className="hover:text-black/80" to="/history">
-              History
-            </Link>
-            <Link className="hover:text-black/80" to="/review">
-              Review
-            </Link>
-            <Link className="hover:text-black/80" to="/login">
-              Login
-            </Link>
-          </nav>
-        </header>
+      <Routes>
+        <Route element={<GuestGuard />}>
+          <Route path="/login" element={<LoginPage />} />
+        </Route>
 
-        <main className="mx-auto max-w-5xl px-6 py-10">
-          <Routes>
+        <Route element={<AuthGuard />}>
+          <Route element={<Layout />}>
             <Route path="/" element={<Navigate replace to="/capture" />} />
-            <Route path="/login" element={<LoginPage />} />
             <Route path="/capture" element={<CapturePage />} />
             <Route path="/practice" element={<PracticePage />} />
             <Route path="/history" element={<HistoryPage />} />
+            <Route path="/review/:sessionId" element={<ReviewPage />} />
+            {/* Legacy review route without session ID to prevent breaking if linked */}
             <Route path="/review" element={<ReviewPage />} />
-          </Routes>
-        </main>
-      </div>
+          </Route>
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }
