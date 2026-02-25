@@ -25,7 +25,7 @@ async def request_magic_link(email: str, db: AsyncSession) -> dict[str, str]:
     settings = get_settings()
     url = f"{settings.APP_URL}/auth/verify?token={token}"
     
-    from app.services.email import send_magic_link_email, mask_email
+    from app.services.email import mask_email, send_magic_link_email
     await send_magic_link_email(
         to=email,
         url=url

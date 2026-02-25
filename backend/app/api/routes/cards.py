@@ -26,10 +26,13 @@ async def create_card(
 async def list_cards(
     offset: int = Query(0, ge=0),
     limit: int = Query(50, ge=1, le=100),
+    sort_by: str = Query("date", pattern="^(date|weight)$"),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    items, total = await card_service.get_user_cards(current_user.id, db, offset, limit)
+    items, total = await card_service.get_user_cards(
+        current_user.id, db, offset, limit, sort_by
+    )
     return CardList(items=list(items), total=total)
 
 

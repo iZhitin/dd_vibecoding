@@ -25,7 +25,7 @@ async def create_card(user_id: UUID, data: CardCreate, db: AsyncSession) -> Card
 
 
 async def get_user_cards(
-    user_id: UUID, db: AsyncSession, offset: int = 0, limit: int = 50
+    user_id: UUID, db: AsyncSession, offset: int = 0, limit: int = 50, sort_by: str = "date"
 ) -> tuple[Sequence[Card], int]:
     # Get total count
     count_stmt = select(func.count()).select_from(Card).where(Card.user_id == user_id)
@@ -33,10 +33,11 @@ async def get_user_cards(
     total = total_result.scalar_one()
 
     # Get items
+    order_col = Card.weight.desc() if sort_by == "weight" else Card.created_at.desc()
     stmt = (
         select(Card)
         .where(Card.user_id == user_id)
-        .order_by(Card.created_at.desc())
+        .order_by(order_col)
         .offset(offset)
         .limit(limit)
     )
