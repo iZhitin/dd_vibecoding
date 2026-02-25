@@ -1033,7 +1033,7 @@ dd/
 
 ---
 
-- [ ] [NOTIFY]-[001] Интегрировать Resend для отправки email
+- [x] [NOTIFY]-[001] Интегрировать Resend для отправки email
 
   **Контекст:** Resend — email-провайдер из PRD §5.3. `RESEND_API_KEY` и `RESEND_FROM_EMAIL` доступны из settings ([INIT]-[003]).
 
@@ -1047,9 +1047,9 @@ dd/
   - Обновить заглушку в `auth.py` ([AUTH]-[001]): заменить print magic link URL на реальную отправку email через `send_email`.
 
   **Критерии готовности (DoD):**
-  - [ ] `send_email("test@example.com", "Test", "<h1>Hello</h1>")` отправляет письмо (при валидном API-ключе)
-  - [ ] При невалидном API-ключе — возвращает `False`, не крашится
-  - [ ] Magic Link отправляется на email при `POST /api/auth/login`
+  - [x] `send_email("test@example.com", "Test", "<h1>Hello</h1>")` отправляет письмо (при валидном API-ключе)
+  - [x] При невалидном API-ключе — возвращает `False`, не крашится
+  - [x] Magic Link отправляется на email при `POST /api/auth/login`
 
 ---
 
