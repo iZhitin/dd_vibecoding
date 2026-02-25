@@ -5,6 +5,7 @@ import { Layout } from "./components/Layout";
 import { CapturePage } from "./pages/CapturePage";
 import { HistoryPage } from "./pages/HistoryPage";
 import { LoginPage } from "./pages/LoginPage";
+import { AuthVerifyPage } from "./pages/AuthVerifyPage";
 import { PracticePage } from "./pages/PracticePage";
 import { ReviewPage } from "./pages/ReviewPage";
 
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route element={<GuestGuard />}>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/auth/verify" element={<AuthVerifyPage />} />
         </Route>
 
         <Route element={<AuthGuard />}>

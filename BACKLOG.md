@@ -1178,7 +1178,7 @@ dd/
 
 ---
 
-- [ ] [UI]-[002] Создать страницу логина (Magic Link)
+- [x] [UI]-[002] Создать страницу логина (Magic Link)
 
   **Контекст:** Auth API работает ([AUTH]-[001]): `POST /api/auth/login` → magic link email, `POST /api/auth/verify` → JWT. AuthStore создан ([UI]-[001]).
 
@@ -1198,10 +1198,10 @@ dd/
     - `verifyToken(token: string)`
 
   **Критерии готовности (DoD):**
-  - [ ] Ввод email → нажатие «Send Magic Link» → показ «Check your email»
-  - [ ] Переход по magic link (`/auth/verify?token=...`) → авторизация → redirect на `/capture`
-  - [ ] Невалидный/просроченный токен → сообщение об ошибке
-  - [ ] UI минималистичный, без лишних элементов
+  - [x] Ввод email → нажатие «Send Magic Link» → показ «Check your email»
+  - [x] Переход по magic link (`/auth/verify?token=...`) → авторизация → redirect на `/capture`
+  - [x] Невалидный/просроченный токен → сообщение об ошибке
+  - [x] UI минималистичный, без лишних элементов
 
 ---
 
