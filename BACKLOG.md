@@ -281,7 +281,7 @@ dd/
 
 ---
 
-- [ ] [INIT]-[005] Настроить Docker Compose для dev-окружения
+- [x] [INIT]-[005] Настроить Docker Compose для dev-окружения
 
   **Контекст:** Backend ([INIT]-[002]) и Frontend ([INIT]-[004]) настроены. Нужны PostgreSQL и Redis для локальной разработки. Продакшн-инфра: Docker Compose + Nginx (TECHSPEC §9).
 

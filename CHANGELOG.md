@@ -28,3 +28,9 @@
 - Настроен Tailwind через `@tailwindcss/vite` и `@import "tailwindcss"` в `src/index.css`, добавлены базовые монохромные стили (белый фон, тёмный текст, sans-serif).
 - Обновлён `frontend/vite.config.ts`: подключён Tailwind-плагин и proxy `/api` на `http://localhost:8000`.
 - Для стабильной верификации тестового контура добавлен backend smoke-тест `backend/tests/test_health.py` (проверка `GET /health`).
+- **[INIT-005]** Настроен Docker Compose для локальной разработки и продакшн-шаблона.
+- Создан `backend/Dockerfile` (python:3.12-slim).
+- Создан `frontend/Dockerfile` (multistage build: node:22-alpine -> nginx:alpine).
+- Создан `docker-compose.dev.yml` для запуска PostgreSQL и Redis локально.
+- Создан `docker-compose.yml` как шаблон полного стека (backend, frontend, nginx, worker, db, redis).
+- Создан `nginx/nginx.conf` с конфигурацией reverse proxy `/api` -> backend, `/` -> frontend.
