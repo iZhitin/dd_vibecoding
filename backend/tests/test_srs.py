@@ -1,5 +1,4 @@
 import uuid
-from collections import Counter
 from unittest.mock import AsyncMock
 
 import pytest
@@ -8,8 +7,8 @@ from app.models.card import Card
 from app.models.practice_log import Grade
 from app.services.srs import (
     select_practice_cards,
-    update_weight_after_review,
     update_weight_after_reveal,
+    update_weight_after_review,
 )
 
 

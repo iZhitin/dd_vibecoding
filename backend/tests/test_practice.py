@@ -165,3 +165,94 @@ async def test_get_daily_practice_existing_active_session(client_with_active_ses
     data = response.json()
     assert data["session_id"] == "00000000-0000-0000-0000-000000000999"
     assert len(data["cards"]) == 0
+
+
+@pytest.fixture
+def mock_db_submit():
+    from unittest.mock import AsyncMock, MagicMock
+
+    class MockResult:
+        def __init__(self, data):
+            self._data = data
+
+        def scalars(self):
+            class MockItems:
+                def __init__(self, d):
+                    self._d = d
+
+                def all(self):
+                    return self._d
+
+                def first(self):
+                    return self._d[0] if self._d else None
+
+            return MockItems(self._data)
+
+    async def mock_execute(stmt):
+        stmt_str = str(stmt).lower()
+        if "users" in stmt_str:
+            return MockResult([User(id=UUID("00000000-0000-0000-0000-000000000001"))])
+        if "practice_sessions" in stmt_str:
+            return MockResult(
+                [
+                    PracticeSession(
+                        id=UUID("00000000-0000-0000-0000-000000000999"),
+                        user_id=UUID("00000000-0000-0000-0000-000000000001"),
+                        status=SessionStatus.ACTIVE,
+                    )
+                ]
+            )
+        if "practice_logs" in stmt_str:
+            return MockResult([])  # No previous log
+        if "cards" in stmt_str:
+            return MockResult(
+                [
+                    Card(
+                        id=UUID("00000000-0000-0000-0000-000000000001"),
+                        user_id=UUID("00000000-0000-0000-0000-000000000001"),
+                        word="word",
+                        weight=1.0,
+                    )
+                ]
+            )
+        return MockResult([])
+
+    db = AsyncMock()
+    db.add = MagicMock()
+    db.commit = AsyncMock()
+    db.refresh = AsyncMock()
+    db.execute = AsyncMock(side_effect=mock_execute)
+    return db
+
+
+@pytest.fixture
+async def client_submit(mock_db_submit, current_user):
+    app.dependency_overrides[get_db] = lambda: mock_db_submit
+    app.dependency_overrides[get_current_user] = lambda: current_user
+
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as c:
+        yield c
+
+    app.dependency_overrides.clear()
+
+
+@pytest.mark.asyncio
+async def test_submit_practice_success(client_submit: AsyncClient, mock_db_submit):
+    sentences = [
+        {
+            "card_id": "00000000-0000-0000-0000-000000000001",
+            "user_sentence": f"Test {i}",
+            "revealed_translation": False,
+        }
+        for i in range(10)
+    ]
+    response = await client_submit.post(
+        "/api/practice/submit",
+        json={"session_id": "00000000-0000-0000-0000-000000000999", "sentences": sentences},
+    )
+    assert response.status_code == 200
+
+    # Verify mock_db.commit was called
+    mock_db_submit.commit.assert_called_once()
+    # Verify 10 logs were added
+    assert mock_db_submit.add.call_count == 10

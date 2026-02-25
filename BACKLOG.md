@@ -786,7 +786,7 @@ dd/
 
 ---
 
-- [ ] [CORE]-[005] Реализовать POST /api/practice/submit — отправка результатов сессии
+- [x] [CORE]-[005] Реализовать POST /api/practice/submit — отправка результатов сессии
 
   **Контекст:** Генерация сессии работает ([CORE]-[004]). TECHSPEC §6 Scenario B: пользователь заполняет 10 предложений → Submit → сервер сохраняет PracticeSession + PracticeLog → запускает LLM-review (асинхронно). PRD §4.2: soft-проверка на copy-paste предыдущего ответа.
 
