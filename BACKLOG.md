@@ -463,7 +463,7 @@ dd/
 
 ---
 
-- [ ] [DATA]-[002] Создать SQLAlchemy-модели: User, Card, PracticeSession, PracticeLog
+- [x] [DATA]-[002] Создать SQLAlchemy-модели: User, Card, PracticeSession, PracticeLog
 
   **Контекст:** База и миксины созданы ([DATA]-[001]). Модель данных основана на PRD §6 (приоритет) и TECHSPEC §4 (детали). Ключевые решения:
   - Таблица `users`: `id` (UUID PK), `email` (unique), `timezone`, `avg_practice_time` (Time, nullable), `streak_current` (int, default 0), `streak_frozen_count` (int, default 0), `last_practice_at` (timestamp, nullable), `is_frozen` (bool, default false).
@@ -480,10 +480,10 @@ dd/
   - В `backend/app/models/__init__.py` импортировать все модели для Alembic autodiscovery.
 
   **Критерии готовности (DoD):**
-  - [ ] Все 4 модели импортируются: `from app.models import User, Card, PracticeSession, PracticeLog`
-  - [ ] `Grade` enum содержит 4 значения: GREEN, GREEN_STAR, YELLOW, RED
-  - [ ] Foreign key связи определены корректно (user→cards, session→logs, card→logs)
-  - [ ] `Card.weight` имеет default=1.0 и тип float
+  - [x] Все 4 модели импортируются: `from app.models import User, Card, PracticeSession, PracticeLog`
+  - [x] `Grade` enum содержит 4 значения: GREEN, GREEN_STAR, YELLOW, RED
+  - [x] Foreign key связи определены корректно (user→cards, session→logs, card→logs)
+  - [x] `Card.weight` имеет default=1.0 и тип float
 
 ---
 

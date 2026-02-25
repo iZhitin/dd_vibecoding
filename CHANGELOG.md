@@ -9,6 +9,11 @@
 ## [0.1.1] — 2026-02-25
 
 ### Добавлено
+- **[DATA-002]** Созданы SQLAlchemy-модели (User, Card, PracticeSession, PracticeLog).
+  - Реализованы таблицы: `users`, `cards`, `practice_sessions`, `practice_logs` со строгой типизацией и использованием UUID.
+  - Настроены перечисления (`enum.StrEnum`) для `SessionStatus` и `Grade`.
+  - Прописаны связи (`relationship`) и правила каскадного удаления (`cascade="all, delete-orphan"`).
+  - Настроен фасад импортов `backend/app/models/__init__.py`.
 - **[DATA-001]** Настроен SQLAlchemy async engine и фабрика сессий.
   - Создан `backend/app/core/database.py` (c `create_async_engine`, `async_sessionmaker` и `get_db()`).
   - Создан `backend/app/models/base.py` с базовым классом `Base` и `TimestampMixin`.
