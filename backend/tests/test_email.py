@@ -1,9 +1,9 @@
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 import pytest
 
-from app.services.email import send_email
 from app.core.config import get_settings
+from app.services.email import send_email
 
 
 @pytest.fixture

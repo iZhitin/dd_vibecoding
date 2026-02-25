@@ -46,8 +46,8 @@ async def send_email(to: str, subject: str, html: str) -> bool:
 
 
 async def send_magic_link_email(to: str, url: str) -> bool:
-    from app.templates.emails import MAGIC_LINK_HTML
     from app.core.config import get_settings
+    from app.templates.emails import MAGIC_LINK_HTML
 
     settings = get_settings()
     html = MAGIC_LINK_HTML.format(url=url)
@@ -59,8 +59,8 @@ async def send_magic_link_email(to: str, url: str) -> bool:
 
 
 async def send_reminder_email(to: str, card_count: int) -> bool:
-    from app.templates.emails import REMINDER_HTML
     from app.core.config import get_settings
+    from app.templates.emails import REMINDER_HTML
 
     settings = get_settings()
     html = REMINDER_HTML.format(card_count=card_count, app_url=settings.APP_URL)

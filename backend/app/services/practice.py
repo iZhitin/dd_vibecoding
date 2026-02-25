@@ -155,6 +155,12 @@ async def submit_practice(
     if user:
         await update_streak(user, db)
 
+        if user.timezone:
+            import zoneinfo
+            user_tz = zoneinfo.ZoneInfo(user.timezone)
+            now_local = datetime.now(UTC).astimezone(user_tz)
+            user.avg_practice_time = now_local.time()
+
     await db.commit()
     await db.refresh(session)
 
