@@ -8,6 +8,15 @@ from app.core.config import get_settings
 logger = logging.getLogger(__name__)
 
 
+def mask_email(email: str) -> str:
+    if not email or "@" not in email:
+        return email
+    local, domain = email.split("@", 1)
+    if len(local) > 0:
+        return f"{local[0]}***@{domain}"
+    return f"***@{domain}"
+
+
 async def send_email(to: str, subject: str, html: str) -> bool:
     settings = get_settings()
     
@@ -31,16 +40,19 @@ async def send_email(to: str, subject: str, html: str) -> bool:
     for attempt in range(max_retries + 1):
         try:
             await asyncio.to_thread(_send)
-            logger.info(f"Email sent successfully to {to}")
+            logger.info(f"Email sent successfully to {mask_email(to)}")
             return True
         except Exception as e:
-            logger.error(f"Error sending email to {to}: {e}")
+            logger.error(f"Error sending email to {mask_email(to)}: {e}")
             if attempt < max_retries:
                 delay = base_delay * (2 ** attempt)
                 logger.info(f"Retrying in {delay} seconds...")
                 await asyncio.sleep(delay)
             else:
-                logger.error(f"Failed to send email to {to} after {max_retries + 1} attempts")
+                logger.error(
+                    f"Failed to send email to {mask_email(to)} "
+                    f"after {max_retries + 1} attempts"
+                )
                 
     return False
 

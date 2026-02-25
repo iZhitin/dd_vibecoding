@@ -1126,7 +1126,7 @@ dd/
 
 ---
 
-- [ ] [NOTIFY]-[099] Уборка этапа NOTIFY
+- [x] [NOTIFY]-[099] Уборка этапа NOTIFY
 
   **Контекст:** Завершены задачи [NOTIFY]-[001]–[NOTIFY]-[004]. Email-система работает: magic link, reminder, digest.
 
@@ -1138,10 +1138,10 @@ dd/
   - Запустить `ruff check app/workers/ app/services/email.py app/templates/`.
 
   **Критерии готовности (DoD):**
-  - [ ] Email-адреса маскированы в логах
-  - [ ] Нет inline JS в email-шаблонах
-  - [ ] API-ключи не в логах
-  - [ ] `ruff check` чисто
+  - [x] Email-адреса маскированы в логах
+  - [x] Нет inline JS в email-шаблонах
+  - [x] API-ключи не в логах
+  - [x] `ruff check` чисто
 
 ---
 
