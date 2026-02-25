@@ -1233,7 +1233,7 @@ dd/
 
 ---
 
-- [ ] [UI]-[004] Создать страницу Practice (Zen Mode)
+- [x] [UI]-[004] Создать страницу Practice (Zen Mode)
 
   **Контекст:** API: `GET /api/practice/daily` ([CORE]-[004]), `POST /api/practice/submit` ([CORE]-[005]), `GET /api/cards/:id/translation` ([CORE]-[006]). PRD §3.B & §4.2: строго 10 карточек, Zen Mode (одна карточка на экране), блокировка перехода при пустом поле, кнопка «Reveal Translation».
 

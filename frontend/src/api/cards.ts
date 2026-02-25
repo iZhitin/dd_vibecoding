@@ -41,4 +41,10 @@ export const cardsApi = {
   getCards: async (offset = 0, limit = 50): Promise<CardList> => {
     return apiClient(`/cards?offset=${offset}&limit=${limit}`);
   },
+
+  getCardTranslation: async (
+    cardId: string,
+  ): Promise<{ card_id: string; translation: string }> => {
+    return apiClient(`/cards/${cardId}/translation`);
+  },
 };
