@@ -21,6 +21,7 @@ export function Layout() {
             )}
             <button
               onClick={logout}
+              aria-label="Log out"
               className="text-gray-500 hover:text-gray-900 transition-colors"
             >
               Logout
@@ -34,7 +35,10 @@ export function Layout() {
       </main>
 
       <footer className="border-t border-gray-200 bg-white py-4 mt-auto">
-        <nav className="mx-auto flex max-w-5xl justify-center gap-8 text-sm text-gray-500 font-medium">
+        <nav
+          aria-label="Main navigation"
+          className="mx-auto flex max-w-5xl justify-center gap-8 text-sm text-gray-500 font-medium"
+        >
           <Link className="hover:text-gray-900 transition-colors" to="/capture">
             Capture
           </Link>

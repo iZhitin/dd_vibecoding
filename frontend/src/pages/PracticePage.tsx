@@ -25,7 +25,7 @@ export function PracticePage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
         <div className="w-8 h-8 rounded-full border-4 border-gray-200 border-t-gray-900 animate-spin" />
-        <p className="text-gray-500 font-medium tracking-tight border-red-500">
+        <p className="text-gray-500 font-medium tracking-tight">
           Curating your daily practice...
         </p>
       </div>
@@ -56,6 +56,7 @@ export function PracticePage() {
         <p className="text-gray-500">{error}</p>
         <button
           onClick={loadDailyPractice}
+          aria-label="Retry loading practice"
           className="mt-4 px-6 py-2 border border-gray-200 text-gray-900 bg-white shadow-sm rounded-lg font-medium hover:bg-gray-50 transition-colors"
         >
           Try Again
@@ -95,6 +96,7 @@ export function PracticePage() {
         </p>
         <button
           onClick={() => navigate("/capture")}
+          aria-label="Go back to capture page"
           className="px-8 py-3 bg-gray-900 text-white rounded-xl font-medium hover:bg-black transition-colors w-full"
         >
           Back to Capture
@@ -115,6 +117,7 @@ export function PracticePage() {
         </p>
         <button
           onClick={() => navigate("/capture")}
+          aria-label="Go to capture page to add words"
           className="px-6 py-2 bg-gray-900 text-white rounded-lg font-medium hover:bg-black transition-colors"
         >
           Add some words

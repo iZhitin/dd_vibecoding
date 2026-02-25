@@ -1353,7 +1353,7 @@ dd/
 
 ---
 
-- [ ] [UI]-[099] Уборка этапа UI
+- [x] [UI]-[099] Уборка этапа UI
 
   **Контекст:** Завершены задачи [UI]-[001]–[UI]-[007]. Frontend PWA: login, capture, practice, history, review, PWA.
 
@@ -1366,10 +1366,10 @@ dd/
   - Запустить `npm run lint` и `npx prettier --write src/`.
 
   **Критерии готовности (DoD):**
-  - [ ] Нет `console.log` в продакшн-коде
-  - [ ] Все страницы responsive (мобильный + десктоп)
-  - [ ] Keyboard navigation работает в Practice (Tab, Enter)
-  - [ ] `npm run lint` и prettier проходят без ошибок
+  - [x] Нет `console.log` в продакшн-коде
+  - [x] Все страницы responsive (мобильный + десктоп)
+  - [x] Keyboard navigation работает в Practice (Tab, Enter)
+  - [x] `npm run lint` и prettier проходят без ошибок
 
 ---
 

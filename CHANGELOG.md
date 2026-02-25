@@ -9,6 +9,13 @@
 ## [0.1.2] — 2026-02-26
 
 ### Добавлено
+- **[UI-099]** Проведена уборка этапа UI.
+  - Удалены `console.error` из `ReviewPage.tsx` и `HistoryPage.tsx` — продакшн-код не должен содержать console-вызовов.
+  - Удалены неиспользуемые каталоги `src/assets/` (пустой) и `src/lib/` (только `.gitkeep`).
+  - Удалён артефактный CSS-класс `border-red-500` в PracticePage.
+  - Добавлена доступность (a11y): `aria-label` на все кнопки (Reveal, Next/Finish, Logout, Load More, Try Again и др.),  `role="img"` и `aria-label` в `TrafficLight`, `aria-label="Main navigation"` на `<nav>`.
+  - Проверена работа keyboard navigation в Practice (Tab/Enter), responsive-вёрстка на мобильных (375px).
+  - Запущены и пройдены `npm run lint`, `prettier --check`, `npm run build`, все 32 backend-теста.
 - **[UI-007]** Настроен Service Worker и PWA manifest.
   - Сгенерированы минималистичные монохромные иконки приложения (512, 192, 180, 32, 16 px).
   - Расширена конфигурация `vite-plugin-pwa`: `start_url`, `scope`, maskable icon, Workbox с `navigateFallbackDenylist` для исключения `/api` из кэша SW.

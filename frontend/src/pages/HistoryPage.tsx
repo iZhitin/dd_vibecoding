@@ -21,8 +21,8 @@ export function HistoryPage() {
         const res = await cardsApi.getCards(pageNum * LIMIT, LIMIT, sortOpt);
         setTotal(res.total);
         setCards((prev) => (append ? [...prev, ...res.items] : res.items));
-      } catch (err) {
-        console.error("Failed to load cards", err);
+      } catch {
+        // Silently handled — user sees empty state
       } finally {
         setIsLoading(false);
       }
@@ -144,6 +144,7 @@ export function HistoryPage() {
             <button
               onClick={handleLoadMore}
               disabled={isLoading}
+              aria-label="Load more cards"
               className="px-6 py-2.5 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-900 font-bold tracking-tight rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? "Loading..." : "Load More"}

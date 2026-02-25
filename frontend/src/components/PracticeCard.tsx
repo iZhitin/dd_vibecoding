@@ -71,6 +71,7 @@ export function PracticeCard() {
           type="button"
           onClick={handleReveal}
           disabled={isRevealed || isRevealing}
+          aria-label="Reveal translation"
           className="text-xs flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors disabled:opacity-50"
         >
           <svg
@@ -127,6 +128,7 @@ export function PracticeCard() {
           onChange={(e) => setSentence(card.card_id, e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Compose a sentence..."
+          aria-label={`Compose a sentence using the word ${card.word}`}
           className="w-full text-lg p-4 bg-gray-50 rounded-xl border border-transparent focus:border-gray-200 focus:bg-white focus:outline-none focus:ring-4 focus:ring-gray-100 transition-all placeholder:text-gray-400"
         />
 
@@ -134,6 +136,7 @@ export function PracticeCard() {
           <button
             onClick={handleNext}
             disabled={!canProceed || isSubmitting}
+            aria-label={isLast ? "Finish practice session" : "Go to next card"}
             className={`
               inline-flex items-center justify-center px-8 py-3.5 rounded-xl font-medium text-white transition-all
               ${
