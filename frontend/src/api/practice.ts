@@ -23,6 +23,26 @@ export interface PracticeSubmitRequest {
   sentences: SentenceSubmit[];
 }
 
+export interface ReviewFeedback {
+  grade: "GREEN" | "GREEN_STAR" | "YELLOW" | "RED";
+  corrected_sentence: string | null;
+  explanation: string;
+  praise: string | null;
+}
+
+export interface PracticeLogReview {
+  id: string;
+  card_word: string;
+  user_sentence: string;
+  grade: "GREEN" | "GREEN_STAR" | "YELLOW" | "RED" | null;
+  llm_feedback: ReviewFeedback | null;
+}
+
+export interface PracticeSessionReviewResponse {
+  session_id: string;
+  logs: PracticeLogReview[];
+}
+
 export const practiceApi = {
   getDailyPractice: async (): Promise<DailyPracticeResponse> => {
     return apiClient("/practice/daily");
@@ -33,5 +53,11 @@ export const practiceApi = {
       method: "POST",
       body: JSON.stringify(data),
     });
+  },
+
+  getPracticeSessionReview: async (
+    sessionId: string,
+  ): Promise<PracticeSessionReviewResponse> => {
+    return apiClient(`/practice/sessions/${sessionId}/review`);
   },
 };

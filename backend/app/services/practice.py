@@ -13,7 +13,12 @@ from app.models.card import Card
 from app.models.practice_log import PracticeLog
 from app.models.practice_session import PracticeSession, SessionStatus
 from app.models.user import User
-from app.schemas.practice import PracticeCardRead, PracticeSubmitRequest
+from app.schemas.practice import (
+    PracticeCardRead,
+    PracticeLogReview,
+    PracticeSessionReviewResponse,
+    PracticeSubmitRequest,
+)
 from app.services.srs import select_practice_cards, update_weight_after_reveal
 from app.services.streak import update_streak
 
@@ -168,3 +173,40 @@ async def submit_practice(
     await pool.enqueue_job("review_sentences", session.id)
 
     return session
+
+
+async def get_practice_session_review(
+    user_id: uuid.UUID, session_id: uuid.UUID, db: AsyncSession
+) -> PracticeSessionReviewResponse:
+    stmt = select(PracticeSession).where(
+        PracticeSession.id == session_id,
+        PracticeSession.user_id == user_id,
+    )
+    result = await db.execute(stmt)
+    session = result.scalars().first()
+
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+
+    logs_stmt = (
+        select(PracticeLog, Card)
+        .join(Card, PracticeLog.card_id == Card.id)
+        .where(PracticeLog.session_id == session.id)
+        .order_by(PracticeLog.created_at)
+    )
+    logs_res = await db.execute(logs_stmt)
+
+    review_logs = []
+    for log, card in logs_res.all():
+        review_logs.append(
+            PracticeLogReview(
+                id=log.id,
+                card_word=card.word,
+                user_sentence=log.user_sentence,
+                grade=log.grade,
+                llm_feedback=log.llm_feedback,
+            )
+        )
+
+    return PracticeSessionReviewResponse(session_id=session.id, logs=review_logs)
+

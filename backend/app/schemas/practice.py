@@ -2,6 +2,9 @@ from uuid import UUID
 
 from pydantic import BaseModel, ValidationInfo, field_validator
 
+from app.models.practice_log import Grade
+from app.schemas.llm import SentenceReview
+
 
 class PracticeCardRead(BaseModel):
     card_id: UUID
@@ -33,3 +36,16 @@ class PracticeSubmitRequest(BaseModel):
         if len(v) != 10:
             raise ValueError("Exactly 10 sentences are required")
         return v
+
+
+class PracticeLogReview(BaseModel):
+    id: UUID
+    card_word: str
+    user_sentence: str
+    grade: Grade | None = None
+    llm_feedback: SentenceReview | None = None
+
+
+class PracticeSessionReviewResponse(BaseModel):
+    session_id: UUID
+    logs: list[PracticeLogReview]
