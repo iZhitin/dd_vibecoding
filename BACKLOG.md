@@ -615,7 +615,7 @@ dd/
 
 ---
 
-- [ ] [AUTH]-[002] Реализовать middleware защиты роутов (get_current_user)
+- [x] [AUTH]-[002] Реализовать middleware защиты роутов (get_current_user)
 
   **Контекст:** JWT-токены генерируются и верифицируются ([AUTH]-[001]). Нужен dependency injection для защиты эндпоинтов — `get_current_user`, который извлекает user из Bearer-токена.
 
@@ -639,7 +639,7 @@ dd/
 
 ---
 
-- [ ] [AUTH]-[003] Реализовать эндпоинт GET /api/me и POST /api/me/timezone
+- [x] [AUTH]-[003] Реализовать эндпоинт GET /api/me и POST /api/me/timezone
 
   **Контекст:** Middleware `get_current_user` готов ([AUTH]-[002]). Схемы `UserRead` и `TimezoneUpdate` созданы ([DATA]-[004]). TECHSPEC §5.1: `GET /me` (Stats, Settings), `POST /me/timezone` (Update local time).
 
@@ -656,7 +656,7 @@ dd/
 
 ---
 
-- [ ] [AUTH]-[099] Уборка этапа AUTH
+- [x] [AUTH]-[099] Уборка этапа AUTH
 
   **Контекст:** Завершены задачи [AUTH]-[001]–[AUTH]-[003]. Auth-flow работает: magic link → verify → JWT → protected routes.
 

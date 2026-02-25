@@ -3,16 +3,20 @@ from unittest.mock import AsyncMock, patch
 from uuid import UUID
 
 import pytest
+from fastapi import HTTPException
 from httpx import ASGITransport, AsyncClient
 
-from app.core.security import create_magic_token
+from app.api.deps import get_current_user
+from app.core.security import create_access_token, create_magic_token
 from app.main import app
 from app.models.user import User
 
 
 @pytest.fixture
 def mock_db():
+    from unittest.mock import AsyncMock, MagicMock
     db = AsyncMock()
+    db.add = MagicMock()
     return db
 
 @pytest.fixture
@@ -60,3 +64,50 @@ async def test_verify_expired_magic_link(client: AsyncClient):
 
     response = await client.post("/api/auth/verify", json={"token": token})
     assert response.status_code == 401
+
+@pytest.mark.asyncio
+async def test_get_current_user_valid(mock_db):
+    user_id = UUID("00000000-0000-0000-0000-000000000001")
+    user = User(id=user_id, email="test@example.com")
+    
+    class MockResult:
+        def scalar_one_or_none(self):
+            return user
+            
+    mock_db.execute.return_value = MockResult()
+    
+    token = create_access_token(user_id)
+    resolved_user = await get_current_user(token=token, db=mock_db)
+    
+    assert resolved_user.id == user_id
+    assert resolved_user.email == "test@example.com"
+
+@pytest.mark.asyncio
+async def test_get_current_user_missing_token(mock_db):
+    with pytest.raises(HTTPException) as exc_info:
+        await get_current_user(token=None, db=mock_db)
+    assert exc_info.value.status_code == 401
+    assert exc_info.value.detail == "Not authenticated"
+
+@pytest.mark.asyncio
+async def test_get_current_user_invalid_token(mock_db):
+    with pytest.raises(HTTPException) as exc_info:
+        await get_current_user(token="invalid_token", db=mock_db)
+    assert exc_info.value.status_code == 401
+    assert exc_info.value.detail == "Invalid token"
+
+@pytest.mark.asyncio
+async def test_get_current_user_not_found(mock_db):
+    class MockResult:
+        def scalar_one_or_none(self):
+            return None
+            
+    mock_db.execute.return_value = MockResult()
+    
+    user_id = UUID("00000000-0000-0000-0000-000000000001")
+    token = create_access_token(user_id)
+    
+    with pytest.raises(HTTPException) as exc_info:
+        await get_current_user(token=token, db=mock_db)
+    assert exc_info.value.status_code == 401
+    assert exc_info.value.detail == "User not found"

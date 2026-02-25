@@ -26,7 +26,6 @@ async def request_magic_link(email: str, db: AsyncSession) -> dict[str, str]:
     url = f"{settings.APP_URL}/auth/verify?token={token}"
     
     logger.info(f"Magic link for {email}: {url}")
-    print(f"MAGIC LINK: {url}")
     
     return {"message": "Magic link sent"}
 
