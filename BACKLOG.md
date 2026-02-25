@@ -487,7 +487,7 @@ dd/
 
 ---
 
-- [ ] [DATA]-[003] Инициализировать Alembic и создать первую миграцию
+- [x] [DATA]-[003] Инициализировать Alembic и создать первую миграцию
 
   **Контекст:** SQLAlchemy-модели созданы ([DATA]-[002]). Alembic используется для версионирования схемы (TECHSPEC §4). PostgreSQL доступен через `docker-compose.dev.yml`.
 
@@ -503,10 +503,10 @@ dd/
   - Применить: `alembic upgrade head`.
 
   **Критерии готовности (DoD):**
-  - [ ] Файл миграции создан в `backend/migrations/versions/`
-  - [ ] `alembic upgrade head` создаёт таблицы `users`, `cards`, `practice_sessions`, `practice_logs` в PostgreSQL
-  - [ ] `alembic downgrade base` откатывает все таблицы
-  - [ ] `alembic current` показывает текущую ревизию
+  - [x] Файл миграции создан в `backend/migrations/versions/`
+  - [x] `alembic upgrade head` создаёт таблицы `users`, `cards`, `practice_sessions`, `practice_logs` в PostgreSQL
+  - [x] `alembic downgrade base` откатывает все таблицы
+  - [x] `alembic current` показывает текущую ревизию
 
 ---
 

@@ -9,6 +9,10 @@
 ## [0.1.1] — 2026-02-25
 
 ### Добавлено
+- **[DATA-003]** Инициализирован Alembic и создана первая миграция.
+  - Установлен асинхронный шаблон Alembic (`alembic init -t async`).
+  - Файл `env.py` настроен на использование `Base.metadata` и конфигурации из pydantic-settings.
+  - Успешно проверены накатывание (`upgrade head`) и откат (`downgrade base`, с удалением Enum type).
 - **[DATA-002]** Созданы SQLAlchemy-модели (User, Card, PracticeSession, PracticeLog).
   - Реализованы таблицы: `users`, `cards`, `practice_sessions`, `practice_logs` со строгой типизацией и использованием UUID.
   - Настроены перечисления (`enum.StrEnum`) для `SessionStatus` и `Grade`.
