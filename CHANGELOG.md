@@ -9,8 +9,11 @@
 ## [0.1.1] — 2026-02-25
 
 ### Добавлено
+- **[DATA-005]** Созданы seed-данные для разработки и тестирования.
+  - Добавлен скрипт `backend/scripts/seed.py`, который генерирует 1 пользователя (`test@dd.local`), 15 карточек с разными метриками (`weight`, `next_review_at`), 2 сессии и 20 логов (`PracticeLog`).
+  - Добавлена команда-синоним `seed` в `pyproject.toml` (`[project.scripts]`).
+  - Скрипт поддерживает идемпотентность (старые данные пользователя корректно удаляются перед вставкой новых).
 - **[DATA-004]** Созданы Pydantic-схемы (request/response) для всех сущностей (User, Card, Practice, Auth).
-  - Схемы Auth (`LoginRequest`, `VerifyRequest`, `TokenResponse`), модели (`CardCreate`, `PracticeSubmitRequest` с валидацией длины, `TimezoneUpdate` с IANA zone_info).
   - Настроены параметры `from_attributes=True` для использования SQLAlchemy объектов.
   - Добавлена зависимость `pydantic[email]` в `pyproject.toml`.
 - **[DATA-003]** Инициализирован Alembic и создана первая миграция.
