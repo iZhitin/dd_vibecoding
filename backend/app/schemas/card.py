@@ -4,19 +4,20 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict
 
 
-class CardCreate(BaseModel):
+class CardBase(BaseModel):
     word: str
     translation: str
     context_sentence: str | None = None
 
 
-class CardRead(BaseModel):
+class CardCreate(CardBase):
+    pass
+
+
+class CardRead(CardBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: UUID
-    word: str
-    translation: str
-    context_sentence: str | None = None
     weight: float
     next_review_at: datetime | None = None
     created_at: datetime
