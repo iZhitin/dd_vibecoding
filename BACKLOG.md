@@ -1377,7 +1377,7 @@ dd/
 
 ---
 
-- [ ] [TEST]-[001] Настроить тестовую инфраструктуру (conftest, фикстуры, factories)
+- [x] [TEST]-[001] Настроить тестовую инфраструктуру (conftest, фикстуры, factories)
 
   **Контекст:** Backend использует Pytest + httpx (async test client), factory_boy для фикстур. БД: PostgreSQL (test database). Нужна изолированная тестовая БД, очищаемая между тестами.
 

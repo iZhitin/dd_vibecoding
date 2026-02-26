@@ -11,6 +11,7 @@ export function CapturePage() {
     isSaving,
     error,
     successMessage,
+    hasTranslated,
     setWord,
     setTranslation,
     setContextSentence,
@@ -92,7 +93,7 @@ export function CapturePage() {
               placeholder="Type a word and press Enter..."
               autoComplete="off"
             />
-            {word.trim() && !isTranslating && !translation && (
+            {word.trim() && !isTranslating && !hasTranslated && !translation && (
               <button
                 type="button"
                 onClick={() => translateWord(word.trim())}
@@ -130,7 +131,7 @@ export function CapturePage() {
         </div>
 
         <AnimatePresence>
-          {(translation || isTranslating) && (
+          {(translation || isTranslating || hasTranslated) && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}

@@ -9,6 +9,7 @@ interface CaptureState {
   isSaving: boolean;
   error: string | null;
   successMessage: string | null;
+  hasTranslated: boolean;
 
   setWord: (word: string) => void;
   setTranslation: (translation: string) => void;
@@ -27,8 +28,9 @@ export const useCaptureStore = create<CaptureState>((set, get) => ({
   isSaving: false,
   error: null,
   successMessage: null,
+  hasTranslated: false,
 
-  setWord: (word) => set({ word, error: null, successMessage: null }),
+  setWord: (word) => set({ word, error: null, successMessage: null, hasTranslated: false }),
   setTranslation: (translation) =>
     set({ translation, error: null, successMessage: null }),
   setContextSentence: (sentence) =>
@@ -42,6 +44,7 @@ export const useCaptureStore = create<CaptureState>((set, get) => ({
       error: null,
       successMessage: null,
       word: wordToTranslate,
+      hasTranslated: false,
     });
 
     try {
@@ -49,11 +52,13 @@ export const useCaptureStore = create<CaptureState>((set, get) => ({
       set({
         translation: response.translation || "",
         isTranslating: false,
+        hasTranslated: true,
       });
     } catch (err: unknown) {
       set({
         error: err instanceof Error ? err.message : "Translation failed",
         isTranslating: false,
+        hasTranslated: true,
       });
     }
   },
@@ -110,5 +115,6 @@ export const useCaptureStore = create<CaptureState>((set, get) => ({
       successMessage: null,
       isTranslating: false,
       isSaving: false,
+      hasTranslated: false,
     }),
 }));

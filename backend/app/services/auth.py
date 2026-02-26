@@ -25,6 +25,10 @@ async def request_magic_link(email: str, db: AsyncSession) -> dict[str, str]:
     settings = get_settings()
     url = f"{settings.APP_URL}/auth/verify?token={token}"
     
+    # Log magic link URL in development for easy local login
+    if settings.APP_ENV == "development":
+        logger.warning(f"[DEV] Magic link URL: {url}")
+
     from app.services.email import mask_email, send_magic_link_email
     await send_magic_link_email(
         to=email,

@@ -43,7 +43,7 @@ async def update_streak(user: User, db: AsyncSession) -> User:
             # Missed more than 1 day or missed 1 day without frozen status
             user.streak_current = 1
 
-    user.last_practice_at = now_utc
+    user.last_practice_at = now_utc.replace(tzinfo=None)
     db.add(user)
     # The commit is typically handled by the caller, e.g., in `submit_practice`.
     # But the instruction says "Сохранить в БД." We can do `await db.flush()`

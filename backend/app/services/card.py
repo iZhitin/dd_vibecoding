@@ -16,7 +16,7 @@ async def create_card(user_id: UUID, data: CardCreate, db: AsyncSession) -> Card
         translation=data.translation,
         context_sentence=data.context_sentence,
         weight=1.0,
-        next_review_at=datetime.now(UTC),
+        next_review_at=datetime.now(UTC).replace(tzinfo=None),
     )
     db.add(card)
     await db.commit()
