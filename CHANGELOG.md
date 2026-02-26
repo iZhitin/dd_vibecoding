@@ -9,6 +9,10 @@
 ## [0.1.2] — 2026-02-26
 
 ### Добавлено
+- **[OPS-003]** Настроены автоматические бэкапы PostgreSQL.
+  - Создан скрипт `scripts/backup.sh` для gzip-дампов через `pg_dump`.
+  - В `docker-compose.yml` добавлен `backup` контейнер (на базе alpine postgres), запускающий бэкап в 03:00 UTC через cron.
+  - Добавлена ротация бэкапов (хранение за последние 7 дней) и volume `pg_backups`.
 - **[OPS-002]** Интегрирован Sentry для отслеживания ошибок.
   - Установлен пакет `sentry-sdk[fastapi]` в зависимости проекта `backend`.
   - В `.env.example` и Pydantic `Settings` добавлена переменная `SENTRY_DSN`.

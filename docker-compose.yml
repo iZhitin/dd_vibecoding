@@ -70,6 +70,23 @@ services:
       redis:
         condition: service_healthy
 
+  backup:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD:-dd}
+    volumes:
+      - ./scripts/backup.sh:/scripts/backup.sh:ro
+      - pg_backups:/backups
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "echo '0 3 * * * sh /scripts/backup.sh' > /var/spool/cron/crontabs/root && crond -f -l 2"
+
 volumes:
   postgres_data:
   redis_data:
+  pg_backups:

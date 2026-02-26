@@ -1648,7 +1648,7 @@ dd/
 
 ---
 
-- [ ] [OPS]-[003] Настроить бэкапы PostgreSQL
+- [x] [OPS]-[003] Настроить бэкапы PostgreSQL
 
   **Контекст:** TECHSPEC §4: «Ежесуточный дамп на S3-compatible storage (или локально на VPS с ротацией)». TECHSPEC §8: «Zero data loss for Captured words».
 
@@ -1667,9 +1667,9 @@ dd/
   - Создать volume для бэкапов в `docker-compose.yml`.
 
   **Критерии готовности (DoD):**
-  - [ ] `backup.sh` создаёт gzip-дамп PostgreSQL
-  - [ ] Ротация удаляет бэкапы старше 7 дней
-  - [ ] Бэкап восстанавливается: `gunzip < backup.sql.gz | psql -U dd dd` без ошибок
+  - [x] `backup.sh` создаёт gzip-дамп PostgreSQL
+  - [x] Ротация удаляет бэкапы старше 7 дней
+  - [x] Бэкап восстанавливается: `gunzip < backup.sql.gz | psql -U dd dd` без ошибок
 
 ---
 
