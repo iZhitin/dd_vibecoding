@@ -2,6 +2,14 @@ services:
   db:
     image: postgres:16-alpine
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.2'
+          memory: 256M
     env_file:
       - .env
     environment:
@@ -19,6 +27,14 @@ services:
   redis:
     image: redis:7-alpine
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
     volumes:
       - redis_data:/data
     healthcheck:
@@ -30,6 +46,14 @@ services:
   backend:
     build: ./backend
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.2'
+          memory: 256M
     env_file:
       - .env
     depends_on:
@@ -46,10 +70,26 @@ services:
   frontend:
     build: ./frontend
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
 
   nginx:
     image: nginx:alpine
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
     ports:
       - "80:80"
       - "443:443"
@@ -64,6 +104,14 @@ services:
   certbot:
     image: certbot/certbot
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
     volumes:
       - certbot_certs:/etc/letsencrypt
       - certbot_data:/var/www/certbot
@@ -73,6 +121,14 @@ services:
     build: ./backend
     command: arq app.workers.config.WorkerSettings
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.2'
+          memory: 256M
     env_file:
       - .env
     depends_on:
@@ -84,6 +140,14 @@ services:
   backup:
     image: postgres:16-alpine
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
     env_file:
       - .env
     environment:

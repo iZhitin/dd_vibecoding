@@ -30,7 +30,8 @@ export const useCaptureStore = create<CaptureState>((set, get) => ({
   successMessage: null,
   hasTranslated: false,
 
-  setWord: (word) => set({ word, error: null, successMessage: null, hasTranslated: false }),
+  setWord: (word) =>
+    set({ word, error: null, successMessage: null, hasTranslated: false }),
   setTranslation: (translation) =>
     set({ translation, error: null, successMessage: null }),
   setContextSentence: (sentence) =>

@@ -23,11 +23,30 @@ async def lifespan(app: FastAPI):
 def create_app() -> FastAPI:
     settings = get_settings()
 
+    def strip_sensitive_data(event, hint):
+        from app.core.logging import SENSITIVE_KEYS
+
+        if "request" in event:
+            request = event.get("request", {})
+            
+            if "data" in request and isinstance(request["data"], dict):
+                for key in request["data"]:
+                    if any(sensitive in str(key).lower() for sensitive in SENSITIVE_KEYS):
+                        request["data"][key] = "***REDACTED***"
+                        
+            if "headers" in request and isinstance(request["headers"], dict):
+                for key in request["headers"]:
+                    if any(sensitive in str(key).lower() for sensitive in SENSITIVE_KEYS):
+                        request["headers"][key] = "***REDACTED***"
+                        
+        return event
+
     if settings.SENTRY_DSN and settings.APP_ENV != "development":
         sentry_sdk.init(
             dsn=settings.SENTRY_DSN,
             traces_sample_rate=0.1,
             environment=settings.APP_ENV,
+            before_send=strip_sensitive_data,
         )
 
     application = FastAPI(

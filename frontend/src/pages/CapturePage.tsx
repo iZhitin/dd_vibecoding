@@ -93,16 +93,19 @@ export function CapturePage() {
               placeholder="Type a word and press Enter..."
               autoComplete="off"
             />
-            {word.trim() && !isTranslating && !hasTranslated && !translation && (
-              <button
-                type="button"
-                onClick={() => translateWord(word.trim())}
-                className="absolute right-2 top-2 rounded-md bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors"
-                disabled={isTranslating}
-              >
-                Translate
-              </button>
-            )}
+            {word.trim() &&
+              !isTranslating &&
+              !hasTranslated &&
+              !translation && (
+                <button
+                  type="button"
+                  onClick={() => translateWord(word.trim())}
+                  className="absolute right-2 top-2 rounded-md bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors"
+                  disabled={isTranslating}
+                >
+                  Translate
+                </button>
+              )}
             {isTranslating && (
               <div className="absolute right-4 top-3 text-gray-400">
                 <svg
