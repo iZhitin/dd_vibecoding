@@ -262,3 +262,73 @@ async def test_submit_practice_success(client_submit: AsyncClient, mock_db_submi
     mock_db_submit.commit.assert_called_once()
     # Verify at least 10 logs were added (plus user update)
     assert mock_db_submit.add.call_count >= 10
+
+
+@pytest.mark.asyncio
+async def test_submit_requires_10_sentences(client_submit: AsyncClient):
+    sentences = [
+        {
+            "card_id": "00000000-0000-0000-0000-000000000001",
+            "user_sentence": f"Test {i}",
+            "revealed_translation": False,
+        }
+        for i in range(5)  # Less than 10
+    ]
+    response = await client_submit.post(
+        "/api/practice/submit",
+        json={"session_id": "00000000-0000-0000-0000-000000000999", "sentences": sentences},
+    )
+    assert response.status_code == 422
+
+
+@pytest.mark.asyncio
+async def test_submit_wrong_user(client_submit: AsyncClient, mock_db_submit):
+    # Override mock to return a session belonging to another user
+    class MockResult:
+        def __init__(self, data):
+            self._data = data
+
+        def scalars(self):
+            class MockItems:
+                def __init__(self, d):
+                    self._d = d
+
+                def all(self):
+                    return self._d
+
+                def first(self):
+                    return self._d[0] if self._d else None
+
+            return MockItems(self._data)
+
+    async def mock_execute(stmt):
+        stmt_str = str(stmt).lower()
+        if "users" in stmt_str:
+            return MockResult([User(id=UUID("00000000-0000-0000-0000-000000000001"))])
+        if "practice_sessions" in stmt_str:
+            return MockResult(
+                [
+                    PracticeSession(
+                        id=UUID("00000000-0000-0000-0000-000000000999"),
+                        user_id=UUID("00000000-0000-0000-0000-000000000002"),  # Different user
+                        status=SessionStatus.ACTIVE,
+                    )
+                ]
+            )
+        return MockResult([])
+    
+    mock_db_submit.execute.side_effect = mock_execute
+
+    sentences = [
+        {
+            "card_id": "00000000-0000-0000-0000-000000000001",
+            "user_sentence": f"Test {i}",
+            "revealed_translation": False,
+        }
+        for i in range(10)
+    ]
+    response = await client_submit.post(
+        "/api/practice/submit",
+        json={"session_id": "00000000-0000-0000-0000-000000000999", "sentences": sentences},
+    )
+    assert response.status_code == 403

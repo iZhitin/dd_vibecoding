@@ -1429,7 +1429,7 @@ dd/
 
 ---
 
-- [ ] [TEST]-[003] Написать тесты API-эндпоинтов (Auth, Cards, Practice)
+- [x] [TEST]-[003] Написать тесты API-эндпоинтов (Auth, Cards, Practice)
 
   **Контекст:** API эндпоинты: auth ([AUTH]-[001]), cards ([CORE]-[001]), practice ([CORE]-[004], [CORE]-[005]). TECHSPEC §10: все P0 сценарии должны быть покрыты.
 
@@ -1452,10 +1452,10 @@ dd/
     - `test_submit_requires_10_sentences`: меньше 10 → 422.
 
   **Критерии готовности (DoD):**
-  - [ ] Все тесты auth проходят
-  - [ ] Все тесты cards проходят
-  - [ ] Все тесты practice проходят
-  - [ ] `pytest tests/ -v` — всё зелёное
+  - [x] Все тесты auth проходят
+  - [x] Все тесты cards проходят
+  - [x] Все тесты practice проходят
+  - [x] `pytest tests/ -v` — всё зелёное
 
 ---
 
