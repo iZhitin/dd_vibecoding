@@ -61,29 +61,19 @@ def mock_db_context(mock_db):
 
 
 @pytest.fixture
-def mock_openai():
-    with patch("app.workers.llm_review.AsyncOpenAI") as mock:
-        client_instance = mock.return_value
-        parse_mock = AsyncMock()
-        
-        # We need mock chain depth for beta.chat.completions.parse
-        beta_mock = MagicMock()
-        chat_mock = MagicMock()
-        completions_mock = MagicMock()
-        
-        completions_mock.parse = parse_mock
-        chat_mock.completions = completions_mock
-        beta_mock.chat = chat_mock
-        client_instance.beta = beta_mock
-        
-        yield parse_mock
+def mock_httpx():
+    with patch("app.workers.llm_review.httpx.AsyncClient") as mock:
+        client_instance = mock.return_value.__aenter__.return_value
+        post_mock = AsyncMock()
+        client_instance.post = post_mock
+        yield post_mock
 
 
 @pytest.fixture
 def mock_settings():
     with patch("app.workers.llm_review.get_settings") as mock:
         settings = MagicMock()
-        settings.OPENAI_API_KEY = "test-sk"
+        settings.OPENROUTER_API_KEY = "test-sk"
         mock.return_value = settings
         yield settings
 
@@ -94,21 +84,8 @@ def mock_srs():
         yield mock
 
 
-class MockMessage:
-    def __init__(self, parsed):
-        self.parsed = parsed
-
-class MockChoice:
-    def __init__(self, message):
-        self.message = message
-
-class MockCompletion:
-    def __init__(self, choices):
-        self.choices = choices
-
-
 @pytest.mark.asyncio
-async def test_review_valid_response(mock_db_context, mock_openai, mock_settings, mock_srs):
+async def test_review_valid_response(mock_db_context, mock_httpx, mock_settings, mock_srs):
     session_id = uuid.uuid4()
     
     review_response = SessionReviewResponse(
@@ -121,7 +98,11 @@ async def test_review_valid_response(mock_db_context, mock_openai, mock_settings
             )
         ]
     )
-    mock_openai.return_value = MockCompletion([MockChoice(MockMessage(review_response))])
+    resp_mock = MagicMock()
+    resp_mock.json.return_value = {
+        "choices": [{"message": {"content": review_response.model_dump_json()}}]
+    }
+    mock_httpx.return_value = resp_mock
     
     ctx = {}
     await review_sentences(ctx, session_id)
@@ -137,12 +118,12 @@ async def test_review_valid_response(mock_db_context, mock_openai, mock_settings
 
 
 @pytest.mark.asyncio
-async def test_review_malformed_json(mock_db_context, mock_openai, mock_settings, mock_srs, caplog):
+async def test_review_malformed_json(mock_db_context, mock_httpx, mock_settings, mock_srs, caplog):
     # If JSON is malformed, OpenAI client throws an Exception (e.g. ValidationError)
     # The worker catches it and retries 3 times, then returns.
     session_id = uuid.uuid4()
     
-    mock_openai.side_effect = Exception("Malformed JSON error")
+    mock_httpx.side_effect = Exception("Malformed JSON error")
     
     ctx = {}
     await review_sentences(ctx, session_id)
@@ -160,10 +141,10 @@ async def test_review_malformed_json(mock_db_context, mock_openai, mock_settings
 
 
 @pytest.mark.asyncio
-async def test_review_api_timeout(mock_db_context, mock_openai, mock_settings, mock_srs, caplog):
+async def test_review_api_timeout(mock_db_context, mock_httpx, mock_settings, mock_srs, caplog):
     session_id = uuid.uuid4()
     
-    mock_openai.side_effect = TimeoutError("Timeout")
+    mock_httpx.side_effect = TimeoutError("Timeout")
     
     # Let's speed up the sleep to not delay tests
     with patch("asyncio.sleep", new_callable=AsyncMock) as mock_sleep:
@@ -180,7 +161,7 @@ async def test_review_api_timeout(mock_db_context, mock_openai, mock_settings, m
 
 
 @pytest.mark.asyncio
-async def test_review_updates_weight(mock_db_context, mock_openai, mock_settings):
+async def test_review_updates_weight(mock_db_context, mock_httpx, mock_settings):
     # This time we DO NOT mock srs so it actually updates the weight
     session_id = uuid.uuid4()
     
@@ -194,7 +175,11 @@ async def test_review_updates_weight(mock_db_context, mock_openai, mock_settings
             )
         ]
     )
-    mock_openai.return_value = MockCompletion([MockChoice(MockMessage(review_response))])
+    resp_mock = MagicMock()
+    resp_mock.json.return_value = {
+        "choices": [{"message": {"content": review_response.model_dump_json()}}]
+    }
+    mock_httpx.return_value = resp_mock
     
     # Original weight is 1.0 (from mock_db setup)
     assert mock_db_context._mock_log.card.weight == 1.0

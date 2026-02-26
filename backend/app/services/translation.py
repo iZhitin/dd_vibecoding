@@ -1,7 +1,7 @@
 import logging
 
 import httpx
-from openai import AsyncOpenAI
+import httpx
 
 from app.core.config import get_settings
 
@@ -38,15 +38,14 @@ async def translate_word(word: str) -> str | None:
                     )
         except Exception as e:
             logger.warning(f"DeepL API failed: {e}")
-            # Fallback to OpenAI
+            # Fallback to OpenRouter
     
-    # 2. Try OpenAI
-    if settings.OPENAI_API_KEY:
+    # 2. Try OpenRouter
+    if settings.OPENROUTER_API_KEY:
         try:
-            client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
-            response = await client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
+            payload = {
+                "model": settings.LLM_MODEL,
+                "messages": [
                     {"role": "system", "content": "You are a professional translator."},
                     {
                         "role": "user", 
@@ -56,12 +55,29 @@ async def translate_word(word: str) -> str | None:
                         )
                     }
                 ],
-                timeout=5.0,
-            )
-            if response.choices and response.choices[0].message.content:
-                return response.choices[0].message.content.strip()
+                "temperature": 0.1,
+            }
+            headers = {
+                "Authorization": f"Bearer {settings.OPENROUTER_API_KEY}",
+                "Content-Type": "application/json",
+            }
+            async with httpx.AsyncClient(timeout=5.0) as http_client:
+                response = await http_client.post(
+                    settings.OPENROUTER_URL,
+                    json=payload,
+                    headers=headers
+                )
+                if response.status_code == 200:
+                    data = response.json()
+                    choices = data.get("choices", [])
+                    if choices and choices[0].get("message", {}).get("content"):
+                        return choices[0]["message"]["content"].strip()
+                else:
+                    logger.warning(
+                        f"OpenRouter API returned status {response.status_code}: {response.text}"
+                    )
         except Exception as e:
-            logger.warning(f"OpenAI API failed: {e}")
+            logger.warning(f"OpenRouter API failed: {e}")
 
     # 3. Both failed or not configured
     logger.error("All translation services failed or are unconfigured.")

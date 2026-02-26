@@ -44,8 +44,8 @@ class PracticeSubmitRequest(BaseModel):
     def check_sentences_length(
         cls, v: list[SentenceSubmit], info: ValidationInfo
     ) -> list[SentenceSubmit]:
-        if len(v) != 10:
-            raise ValueError("Exactly 10 sentences are required")
+        if len(v) < 1:
+            raise ValueError("At least one sentence is required")
         return v
 
 

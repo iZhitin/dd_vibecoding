@@ -58,17 +58,21 @@ async def test_translate_success_deepl(client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_translate_fallback_openai(client: AsyncClient):
+async def test_translate_fallback_openrouter(client: AsyncClient):
     settings = get_settings()
     settings.DEEPL_API_KEY = ""
-    settings.OPENAI_API_KEY = "dummy_openai_key"
+    settings.OPENROUTER_API_KEY = "dummy_openrouter_key"
 
-    with patch(
-        "openai.resources.chat.completions.AsyncCompletions.create", new_callable=AsyncMock
-    ) as mock_create:
-        mock_create.return_value.choices = [
-            AsyncMock(message=AsyncMock(content="счастливая случайность"))
-        ]
+    with patch("app.services.translation.httpx.AsyncClient") as mock_client_class:
+        from unittest.mock import MagicMock
+        mock_instance = mock_client_class.return_value.__aenter__.return_value
+        
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {
+            "choices": [{"message": {"content": "счастливая случайность"}}]
+        }
+        mock_instance.post = AsyncMock(return_value=mock_resp)
 
         response = await client.post(
             "/api/translate",
@@ -80,24 +84,18 @@ async def test_translate_fallback_openai(client: AsyncClient):
     assert data["word"] == "serendipity"
     assert data["translation"] == "счастливая случайность"
 
-    settings.OPENAI_API_KEY = ""
+    settings.OPENROUTER_API_KEY = ""
 
 
 @pytest.mark.asyncio
 async def test_translate_failure_null(client: AsyncClient):
     settings = get_settings()
     settings.DEEPL_API_KEY = "dummy:fx"
-    settings.OPENAI_API_KEY = "dummy_openai"
+    settings.OPENROUTER_API_KEY = "dummy_openrouter"
 
-    with patch("app.services.translation.httpx.AsyncClient") as mock_client_class, \
-         patch(
-             "openai.resources.chat.completions.AsyncCompletions.create", new_callable=AsyncMock
-         ) as mock_create:
-        
+    with patch("app.services.translation.httpx.AsyncClient") as mock_client_class:
         mock_instance = mock_client_class.return_value.__aenter__.return_value
         mock_instance.post = AsyncMock(side_effect=Exception("Timeout"))
-
-        mock_create.side_effect = Exception("Timeout")
 
         response = await client.post(
             "/api/translate",
@@ -109,4 +107,4 @@ async def test_translate_failure_null(client: AsyncClient):
     assert data["translation"] is None
 
     settings.DEEPL_API_KEY = ""
-    settings.OPENAI_API_KEY = ""
+    settings.OPENROUTER_API_KEY = ""

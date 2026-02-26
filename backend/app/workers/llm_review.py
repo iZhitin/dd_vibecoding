@@ -3,8 +3,8 @@ import logging
 import uuid
 from typing import Any
 
-from openai import AsyncOpenAI
-from openai.types.chat import ParsedChatCompletion
+import httpx
+
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
@@ -20,11 +20,9 @@ logger = logging.getLogger(__name__)
 
 async def review_sentences(ctx: dict[str, Any], session_id: uuid.UUID) -> None:
     settings = get_settings()
-    if not settings.OPENAI_API_KEY:
-        logger.warning("OPENAI_API_KEY is missing. Skipping LLM review.")
+    if not settings.OPENROUTER_API_KEY:
+        logger.warning("OPENROUTER_API_KEY is missing. Skipping LLM review.")
         return
-
-    client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
 
     async with async_session_maker() as db:
         session_obj = await db.get(PracticeSession, session_id)
@@ -51,7 +49,10 @@ async def review_sentences(ctx: dict[str, Any], session_id: uuid.UUID) -> None:
             "- GREEN: Correct usage, no errors.\n"
             "- GREEN_STAR: Outstanding, creative, or advanced usage.\n"
             "- YELLOW: Minor issues (style, typo) but meaning is correct.\n"
-            "- RED: Grammatical error or incorrect word usage."
+            "- RED: Grammatical error or incorrect word usage.\n\n"
+            "Respond ONLY with a valid JSON object exactly matching this schema:\n"
+            f"{SessionReviewResponse.model_json_schema()}\n\n"
+            "Do not wrap the JSON in markdown code blocks."
         )
 
         user_content = ""
@@ -72,18 +73,29 @@ async def review_sentences(ctx: dict[str, Any], session_id: uuid.UUID) -> None:
         parsed_response = None
         for attempt in range(max_retries):
             try:
-                completion: ParsedChatCompletion[
-                    SessionReviewResponse
-                ] = await client.beta.chat.completions.parse(
-                    model="gpt-4o-mini",
-                    messages=[
+                payload = {
+                    "model": settings.LLM_MODEL,
+                    "messages": [
                         {"role": "system", "content": system_prompt},
                         {"role": "user", "content": user_content},
                     ],
-                    response_format=SessionReviewResponse,
-                    timeout=30.0,
-                )
-                parsed_response = completion.choices[0].message.parsed
+                    "temperature": 0.1,
+                }
+                headers = {
+                    "Authorization": f"Bearer {settings.OPENROUTER_API_KEY}",
+                    "Content-Type": "application/json",
+                }
+
+                async with httpx.AsyncClient(timeout=30.0) as http_client:
+                    resp = await http_client.post(
+                        settings.OPENROUTER_URL, json=payload, headers=headers
+                    )
+                    resp.raise_for_status()
+                    data = resp.json()
+
+                raw = data["choices"][0]["message"]["content"]
+                cleaned = raw.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+                parsed_response = SessionReviewResponse.model_validate_json(cleaned)
                 break
             except Exception as e:
                 logger.error(f"Error during OpenAI API call attempt {attempt + 1}: {e}")

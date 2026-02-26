@@ -11,7 +11,9 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRE_MINUTES: int = 10080
 
-    OPENAI_API_KEY: str = ""
+    OPENROUTER_API_KEY: str = ""
+    OPENROUTER_URL: str = "https://openrouter.ai/api/v1/chat/completions"
+    LLM_MODEL: str = "google/gemini-2.5-flash"
     DEEPL_API_KEY: str = ""
 
     RESEND_API_KEY: str = ""
