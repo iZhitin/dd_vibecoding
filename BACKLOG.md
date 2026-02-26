@@ -1401,7 +1401,7 @@ dd/
 
 ---
 
-- [ ] [TEST]-[002] Написать тесты SRS-алгоритма и Streak-логики
+- [x] [TEST]-[002] Написать тесты SRS-алгоритма и Streak-логики
 
   **Контекст:** SRS реализован в `backend/app/services/srs.py` ([CORE]-[003]). Streak — в `backend/app/services/streak.py` ([CORE]-[007]). TECHSPEC §10: тесты `SRS_Algo` и `Streak_Logic`.
 
@@ -1423,9 +1423,9 @@ dd/
     - `test_freeze_count_decreases`: `streak_frozen_count` уменьшается при использовании.
 
   **Критерии готовности (DoD):**
-  - [ ] Все тесты SRS проходят
-  - [ ] Все тесты Streak проходят
-  - [ ] `pytest tests/test_srs.py tests/test_streak.py -v` — зелёный
+  - [x] Все тесты SRS проходят
+  - [x] Все тесты Streak проходят
+  - [x] `pytest tests/test_srs.py tests/test_streak.py -v` — зелёный
 
 ---
 
