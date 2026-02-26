@@ -1,6 +1,7 @@
 import uuid
 from contextlib import asynccontextmanager
 
+import sentry_sdk
 import structlog
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -20,13 +21,21 @@ async def lifespan(app: FastAPI):
 
 
 def create_app() -> FastAPI:
+    settings = get_settings()
+
+    if settings.SENTRY_DSN and settings.APP_ENV != "development":
+        sentry_sdk.init(
+            dsn=settings.SENTRY_DSN,
+            traces_sample_rate=0.1,
+            environment=settings.APP_ENV,
+        )
+
     application = FastAPI(
         title="DD API",
         version="0.1.0",
         lifespan=lifespan,
     )
 
-    settings = get_settings()
     cors_origins = settings.APP_URL
     allow_origins = [origin.strip() for origin in cors_origins.split(",") if origin.strip()]
     if not allow_origins:

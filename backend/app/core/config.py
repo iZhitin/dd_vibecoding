@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     APP_URL: str = "http://localhost:5173"
     APP_ENV: str = "development"
 
+    SENTRY_DSN: str | None = None
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
 

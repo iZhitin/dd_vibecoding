@@ -1627,7 +1627,7 @@ dd/
 
 ---
 
-- [ ] [OPS]-[002] Интегрировать Sentry для отслеживания ошибок
+- [x] [OPS]-[002] Интегрировать Sentry для отслеживания ошибок
 
   **Контекст:** TECHSPEC §8: «Sentry integration for backend errors».
 
@@ -1642,9 +1642,9 @@ dd/
   - Проверить, что unhandled exceptions отправляются в Sentry.
 
   **Критерии готовности (DoD):**
-  - [ ] `SENTRY_DSN` добавлен в `.env.example`
-  - [ ] Sentry инициализируется только в production
-  - [ ] Unhandled exception → событие в Sentry (проверить через `sentry_sdk.capture_message("test")`)
+  - [x] `SENTRY_DSN` добавлен в `.env.example`
+  - [x] Sentry инициализируется только в production
+  - [x] Unhandled exception → событие в Sentry (проверить через `sentry_sdk.capture_message("test")`)
 
 ---
 
