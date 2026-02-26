@@ -1673,7 +1673,7 @@ dd/
 
 ---
 
-- [ ] [OPS]-[004] Настроить HTTPS и email-аутентификацию домена
+- [x] [OPS]-[004] Настроить HTTPS и email-аутентификацию домена
 
   **Контекст:** TECHSPEC §8: «HTTPS everywhere (LetsEncrypt)». TECHSPEC §11: «Domain authentication (DKIM/SPF) setup is crucial» для email deliverability.
 
@@ -1685,9 +1685,9 @@ dd/
   - Документировать в README: настройка DNS-записей (A, DKIM, SPF, DMARC) для email-домена.
 
   **Критерии готовности (DoD):**
-  - [ ] Nginx конфигурация поддерживает SSL
-  - [ ] HTTP-запросы перенаправляются на HTTPS
-  - [ ] Документация по настройке DNS для email
+  - [x] Nginx конфигурация поддерживает SSL
+  - [x] HTTP-запросы перенаправляются на HTTPS
+  - [x] Документация по настройке DNS для email
 
 ---
 
