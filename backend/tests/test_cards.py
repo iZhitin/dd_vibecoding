@@ -150,7 +150,8 @@ async def test_cards_isolation(client: AsyncClient, mock_db):
     response = await client.get("/api/cards")
     assert response.status_code == 200
     
-    # Just verify that execute is called (it is called implicitly with current_user_id through service)
+    # Just verify that execute is called 
+    # (it is called implicitly with current_user_id through service)
     # The actual implementation in services/card.py scopes queries to user_id. 
     # For a mocked test, as long as it returns 200, it passes.
     assert mock_db.execute.called

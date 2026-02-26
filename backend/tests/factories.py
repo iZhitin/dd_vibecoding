@@ -1,11 +1,13 @@
-import factory
 import datetime
 from uuid import uuid4
 
-from app.models.user import User
+import factory
+
 from app.models.card import Card
+from app.models.practice_log import PracticeLog
 from app.models.practice_session import PracticeSession, SessionStatus
-from app.models.practice_log import PracticeLog, Grade
+from app.models.user import User
+
 
 class UserFactory(factory.Factory):
     class Meta:

@@ -54,7 +54,9 @@ async def generate_daily_session(
         session = active_session
     else:
         session = PracticeSession(
-            user_id=user_id, status=SessionStatus.ACTIVE, started_at=datetime.now(UTC).replace(tzinfo=None)
+            user_id=user_id,
+            status=SessionStatus.ACTIVE,
+            started_at=datetime.now(UTC).replace(tzinfo=None),
         )
         db.add(session)
         await db.commit()

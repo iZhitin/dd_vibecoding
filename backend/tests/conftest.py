@@ -1,18 +1,20 @@
 import os
+
 os.environ.setdefault("DATABASE_URL", "postgresql+asyncpg://dd:dd@localhost:5432/dd_test")
 
 import asyncio
-from typing import AsyncGenerator, Generator
-import pytest
-from httpx import AsyncClient, ASGITransport
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
+from collections.abc import AsyncGenerator, Generator
 
-from app.main import app
-from app.core.database import get_db
-from app.models.base import Base
+import pytest
+from httpx import ASGITransport, AsyncClient
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+
 import app.models  # Ensure models are loaded for Base.metadata
 from app.core.config import get_settings
+from app.core.database import get_db
 from app.core.security import create_access_token
+from app.main import app
+from app.models.base import Base
 from tests.factories import UserFactory
 
 engine = create_async_engine(get_settings().DATABASE_URL, pool_pre_ping=True)

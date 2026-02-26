@@ -1459,7 +1459,7 @@ dd/
 
 ---
 
-- [ ] [TEST]-[004] Написать тест LLM Worker с мок-ответами
+- [x] [TEST]-[004] Написать тест LLM Worker с мок-ответами
 
   **Контекст:** LLM Review Worker реализован в `backend/app/workers/llm_review.py` ([AI]-[003]). TECHSPEC §10: `Mock_LLM` — ensure JSON parsing handles malformed LLM responses gracefully.
 
@@ -1472,14 +1472,14 @@ dd/
   - Использовать `unittest.mock.patch` или `pytest-mock` для мока OpenAI.
 
   **Критерии готовности (DoD):**
-  - [ ] Все 4 теста проходят
-  - [ ] Malformed JSON не крашит воркер
-  - [ ] Timeout приводит к retry, затем graceful failure
-  - [ ] `pytest tests/test_llm_review.py -v` — зелёный
+  - [x] Все 4 теста проходят
+  - [x] Malformed JSON не крашит воркер
+  - [x] Timeout приводит к retry, затем graceful failure
+  - [x] `pytest tests/test_llm_review.py -v` — зелёный
 
 ---
 
-- [ ] [TEST]-[099] Уборка этапа TEST
+- [x] [TEST]-[099] Уборка этапа TEST
 
   **Контекст:** Завершены задачи [TEST]-[001]–[TEST]-[004]. Тестовое покрытие: SRS, Streak, Auth, Cards, Practice, LLM Worker.
 
@@ -1492,10 +1492,10 @@ dd/
   - Запустить `ruff check tests/`.
 
   **Критерии готовности (DoD):**
-  - [ ] `pytest tests/ -v` — всё зелёное (3 запуска подряд стабильны)
-  - [ ] Нет реальных API-ключей в тестах
-  - [ ] Нет дублирования фикстур
-  - [ ] CI pipeline запускает тесты
+  - [x] `pytest tests/ -v` — всё зелёное (3 запуска подряд стабильны)
+  - [x] Нет реальных API-ключей в тестах
+  - [x] Нет дублирования фикстур
+  - [x] CI pipeline запускает тесты
 
 ---
 
@@ -1503,7 +1503,7 @@ dd/
 
 ---
 
-- [ ] [SEC]-[001] Валидация и санитизация пользовательского ввода
+- [x] [SEC]-[001] Валидация и санитизация пользовательского ввода
 
   **Контекст:** TECHSPEC §8: «Sanitize all user inputs (prevent XSS/Injection)». Пользователь вводит: email, слово, перевод, предложения. Все строковые поля проходят через Pydantic, но дополнительная санитизация нужна для HTML/SQL.
 
@@ -1520,14 +1520,14 @@ dd/
   - Применить `sanitize_text` через Pydantic `@field_validator` во всех текстовых полях.
 
   **Критерии готовности (DoD):**
-  - [ ] `<script>alert(1)</script>` в поле `word` → экранировано при сохранении
-  - [ ] Строки длиннее лимита → 422
-  - [ ] Пустые строки (после strip) → 422
-  - [ ] SQL-инъекция через строки невозможна (SQLAlchemy параметризует запросы)
+  - [x] `<script>alert(1)</script>` в поле `word` → экранировано при сохранении
+  - [x] Строки длиннее лимита → 422
+  - [x] Пустые строки (после strip) → 422
+  - [x] SQL-инъекция через строки невозможна (SQLAlchemy параметризует запросы)
 
 ---
 
-- [ ] [SEC]-[002] Настроить rate limiting
+- [x] [SEC]-[002] Настроить rate limiting
 
   **Контекст:** TECHSPEC §3: Nginx rate limiting. Дополнительно — SlowAPI на уровне FastAPI для granular control. Критичные эндпоинты: `/api/auth/login` (brute-force magic tokens), `/api/translate` (стоимость API), `/api/practice/submit`.
 
@@ -1546,13 +1546,13 @@ dd/
     ```
 
   **Критерии готовности (DoD):**
-  - [ ] 6-й запрос на `/api/auth/login` за минуту → 429
-  - [ ] Nginx rate limiting работает на уровне reverse proxy
-  - [ ] Лимиты не блокируют нормальное использование (10 submits за сессию проходят)
+  - [x] 6-й запрос на `/api/auth/login` за минуту → 429
+  - [x] Nginx rate limiting работает на уровне reverse proxy
+  - [x] Лимиты не блокируют нормальное использование (10 submits за сессию проходят)
 
 ---
 
-- [ ] [SEC]-[003] Настроить CORS, CSP-заголовки, защиту от XSS
+- [x] [SEC]-[003] Настроить CORS, CSP-заголовки, защиту от XSS
 
   **Контекст:** TECHSPEC §8: HTTPS everywhere, XSS prevention. CORS уже настроен базово ([INIT]-[002]), но нужна доработка.
 
@@ -1575,13 +1575,13 @@ dd/
     ```
 
   **Критерии готовности (DoD):**
-  - [ ] Запрос с неизвестного origin → CORS reject
-  - [ ] Response headers содержат X-Frame-Options, X-Content-Type-Options, CSP
-  - [ ] `curl -I` показывает все security headers
+  - [x] Запрос с неизвестного origin → CORS reject
+  - [x] Response headers содержат X-Frame-Options, X-Content-Type-Options, CSP
+  - [x] `curl -I` показывает все security headers
 
 ---
 
-- [ ] [SEC]-[099] Уборка этапа SEC
+- [x] [SEC]-[099] Уборка этапа SEC
 
   **Контекст:** Завершены задачи [SEC]-[001]–[SEC]-[003]. Безопасность: валидация, rate limiting, headers.
 
@@ -1595,10 +1595,10 @@ dd/
   - Создать `.dockerignore` в `backend/` и `frontend/`: `.env`, `__pycache__`, `node_modules`, `.git`.
 
   **Критерии готовности (DoD):**
-  - [ ] Все protected-эндпоинты проверены на auth
-  - [ ] IDOR невозможен (пользователь видит только свои данные)
-  - [ ] `.dockerignore` исключает секреты
-  - [ ] Нет реальных секретов в `.env.example` и в коде
+  - [x] Все protected-эндпоинты проверены на auth
+  - [x] IDOR невозможен (пользователь видит только свои данные)
+  - [x] `.dockerignore` исключает секреты
+  - [x] Нет реальных секретов в `.env.example` и в коде
 
 ---
 
@@ -1606,7 +1606,7 @@ dd/
 
 ---
 
-- [ ] [OPS]-[001] Настроить structured logging (JSON)
+- [x] [OPS]-[001] Настроить structured logging (JSON)
 
   **Контекст:** TECHSPEC §8: «Structured Logs (JSON) → Local file / Simple viewer». Нужно заменить стандартный uvicorn-лог на JSON-формат для парсинга.
 
@@ -1620,10 +1620,10 @@ dd/
   - Применить logging config при старте приложения в `main.py`.
 
   **Критерии готовности (DoD):**
-  - [ ] Логи выводятся в JSON-формате
-  - [ ] Каждый лог содержит timestamp, level, message
-  - [ ] Каждый HTTP-запрос имеет уникальный request_id в логах
-  - [ ] Уровень логирования настраивается через переменную окружения
+  - [x] Логи выводятся в JSON-формате
+  - [x] Каждый лог содержит timestamp, level, message
+  - [x] Каждый HTTP-запрос имеет уникальный request_id в логах
+  - [x] Уровень логирования настраивается через переменную окружения
 
 ---
 

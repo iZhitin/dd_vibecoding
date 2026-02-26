@@ -1,7 +1,8 @@
 from uuid import UUID
 
-from pydantic import BaseModel, ValidationInfo, field_validator
+from pydantic import BaseModel, Field, ValidationInfo, field_validator
 
+from app.core.sanitize import sanitize_text
 from app.models.practice_log import Grade
 from app.schemas.llm import SentenceReview
 
@@ -20,8 +21,18 @@ class DailyPracticeResponse(BaseModel):
 
 class SentenceSubmit(BaseModel):
     card_id: UUID
-    user_sentence: str
+    user_sentence: str = Field(..., max_length=1000)
     revealed_translation: bool = False
+
+    @field_validator("user_sentence", mode="before")
+    @classmethod
+    def validate_user_sentence(cls, v: str) -> str:
+        if not isinstance(v, str):
+            return v
+        v = sanitize_text(v)
+        if not v:
+            raise ValueError("Sentence cannot be empty")
+        return v
 
 
 class PracticeSubmitRequest(BaseModel):
