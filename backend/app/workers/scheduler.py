@@ -5,7 +5,7 @@ from datetime import UTC, datetime
 from arq.connections import ArqRedis
 from sqlalchemy import select
 
-from app.core.database import async_sessionmaker
+from app.core.database import async_session_maker
 from app.models.user import User
 from app.services.email import send_reminder_email
 
@@ -16,7 +16,7 @@ async def smart_nudge_check(ctx: dict) -> None:
     logger.info("Running smart nudge check")
     redis: ArqRedis = ctx["redis"]
 
-    async with async_sessionmaker() as db:
+    async with async_session_maker() as db:
         stmt = select(User).where(
             User.avg_practice_time.is_not(None), User.timezone.is_not(None)
         )
