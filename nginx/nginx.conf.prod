@@ -15,7 +15,7 @@ http {
     
     server {
         listen 80;
-        server_name ddictionary.org www.ddictionary.org;
+        server_name ddictionary.org;
 
         location /.well-known/acme-challenge/ {
             root /var/www/certbot;
@@ -28,7 +28,7 @@ http {
 
     server {
         listen 443 ssl;
-        server_name ddictionary.org www.ddictionary.org;
+        server_name ddictionary.org;
 
         ssl_certificate /etc/letsencrypt/live/ddictionary.org/fullchain.pem;
         ssl_certificate_key /etc/letsencrypt/live/ddictionary.org/privkey.pem;

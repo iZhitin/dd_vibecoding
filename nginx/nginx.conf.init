@@ -12,7 +12,7 @@ http {
 
     server {
         listen 80;
-        server_name ddictionary.org www.ddictionary.org;
+        server_name ddictionary.org;
 
         location /.well-known/acme-challenge/ {
             root /var/www/certbot;

@@ -6,7 +6,7 @@ if ! docker compose version > /dev/null 2>&1; then
   exit 1
 fi
 
-domains=(ddictionary.org www.ddictionary.org)
+domains=(ddictionary.org)
 rsa_key_size=4096
 data_path="./data/certbot"
 email="admin@ddictionary.org" 
