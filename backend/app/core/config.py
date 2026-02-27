@@ -21,6 +21,7 @@ class Settings(BaseSettings):
 
     APP_URL: str = "http://localhost:5173"
     APP_ENV: str = "development"
+    DIGEST_INTERVAL_HOURS: int = 24
 
     SENTRY_DSN: str | None = None
 

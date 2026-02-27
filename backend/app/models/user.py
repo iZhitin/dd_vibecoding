@@ -22,6 +22,7 @@ class User(TimestampMixin, Base):
     streak_current: Mapped[int] = mapped_column(Integer, default=0)
     streak_frozen_count: Mapped[int] = mapped_column(Integer, default=0)
     last_practice_at: Mapped[datetime | None] = mapped_column(nullable=True)
+    last_digest_at: Mapped[datetime | None] = mapped_column(nullable=True)
     is_frozen: Mapped[bool] = mapped_column(Boolean, default=False)
 
     cards: Mapped[list["Card"]] = relationship(
