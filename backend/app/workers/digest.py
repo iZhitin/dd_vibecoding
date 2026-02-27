@@ -52,37 +52,37 @@ async def send_daily_digests(ctx: dict) -> None:
                     )
                 
                 sess_res = await db.execute(sess_stmt)
-                target_sessions = list(sess_res.scalars().all())
+                all_sessions = list(sess_res.scalars().all())
 
-                if not target_sessions:
+                if not all_sessions:
                     continue
 
+                # 3. Filter only sessions that are FULLY reviewed by LLM
+                target_sessions = []
                 reviews = []
-                all_llm_completed = True
-                for s in target_sessions:
+                for s in all_sessions:
+                    session_ready = True
+                    session_reviews = []
                     for log in s.logs:
                         if log.grade is None:
-                            all_llm_completed = False
+                            session_ready = False
                             break
-
+                        
                         fb = log.llm_feedback or {}
-                        reviews.append(
-                            {
-                                "grade": log.grade.value,
-                                "word": log.card.word,
-                                "explanation": fb.get("explanation", ""),
-                                "praise": fb.get("praise"),
-                                "corrected_sentence": fb.get("corrected_sentence"),
-                            }
-                        )
-                    if not all_llm_completed:
-                        break
-
-                if not all_llm_completed:
-                    logger.warning(f"Skipping digest for user {user.id}, LLM review not finished")
-                    continue
+                        session_reviews.append({
+                            "grade": log.grade.value,
+                            "word": log.card.word,
+                            "explanation": fb.get("explanation", ""),
+                            "praise": fb.get("praise"),
+                            "corrected_sentence": fb.get("corrected_sentence"),
+                        })
+                    
+                    if session_ready and session_reviews:
+                        target_sessions.append(s)
+                        reviews.extend(session_reviews)
 
                 if not reviews:
+                    logger.info(f"No fully reviewed sessions for user {user.id} yet.")
                     continue
 
                 session_id_str = str(target_sessions[-1].id)
@@ -96,6 +96,7 @@ async def send_daily_digests(ctx: dict) -> None:
                 )
 
                 if success:
+                    # Update to the latest session's completion time or now
                     user.last_digest_at = utc_now.replace(tzinfo=None)
                     await db.commit()
                     logger.info(f"Digest sent to user {user.id} (updated last_digest_at)")
