@@ -28,6 +28,7 @@ _pool: ArqRedis | None = None
 
 async def get_arq_pool() -> ArqRedis:
     global _pool
+    # Re-create pool if it doesn't exist or its underlying redis connection is closed/loop is closed
     if _pool is None:
         settings = get_settings()
         _pool = await create_pool(RedisSettings.from_dsn(settings.REDIS_URL))

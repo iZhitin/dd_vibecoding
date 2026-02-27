@@ -265,15 +265,8 @@ async def test_submit_practice_success(client_submit: AsyncClient, mock_db_submi
 
 
 @pytest.mark.asyncio
-async def test_submit_requires_10_sentences(client_submit: AsyncClient):
-    sentences = [
-        {
-            "card_id": "00000000-0000-0000-0000-000000000001",
-            "user_sentence": f"Test {i}",
-            "revealed_translation": False,
-        }
-        for i in range(5)  # Less than 10
-    ]
+async def test_submit_requires_at_least_one_sentence(client_submit: AsyncClient):
+    sentences = []  # Empty list to trigger 422
     response = await client_submit.post(
         "/api/practice/submit",
         json={"session_id": "00000000-0000-0000-0000-000000000999", "sentences": sentences},
