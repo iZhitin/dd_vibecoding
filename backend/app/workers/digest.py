@@ -7,7 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
 from app.core.config import get_settings
-from app.core.database import async_sessionmaker
+from app.core.database import async_session_maker
 from app.models.practice_log import PracticeLog
 from app.models.practice_session import PracticeSession, SessionStatus
 from app.models.user import User
@@ -21,7 +21,7 @@ async def send_daily_digests(ctx: dict) -> None:
     redis: ArqRedis = ctx.get("redis")
     settings = get_settings()
 
-    async with async_sessionmaker() as db:
+    async with async_session_maker() as db:
         stmt = select(User).where(User.timezone.is_not(None))
         res = await db.execute(stmt)
         users = res.scalars().all()
