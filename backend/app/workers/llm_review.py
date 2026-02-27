@@ -4,7 +4,6 @@ import uuid
 from typing import Any
 
 import httpx
-
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
@@ -94,7 +93,13 @@ async def review_sentences(ctx: dict[str, Any], session_id: uuid.UUID) -> None:
                     data = resp.json()
 
                 raw = data["choices"][0]["message"]["content"]
-                cleaned = raw.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+                cleaned = (
+                    raw.strip()
+                    .removeprefix("```json")
+                    .removeprefix("```")
+                    .removesuffix("```")
+                    .strip()
+                )
                 parsed_response = SessionReviewResponse.model_validate_json(cleaned)
                 break
             except Exception as e:

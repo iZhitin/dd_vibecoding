@@ -1,8 +1,6 @@
 import logging
-import zoneinfo
 from datetime import UTC, datetime, timedelta
 
-from arq.connections import ArqRedis
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
